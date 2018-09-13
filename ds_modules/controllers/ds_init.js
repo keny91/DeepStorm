@@ -1,7 +1,6 @@
 
-const Files_env = require("")
-
-const Files_env = {};
+//const Files_env = require("")
+const fs = require('fs');
 
 class Instance {
     constructor(){
@@ -22,23 +21,25 @@ class Instance {
     {
         console.log("Hello, my " + this.name + ".")
     }
-}
 
-
-
-
-function CheckHostReplayParser(){
-    console.log("Checking for required libraries.", )
-    if (fs.existsSync(".\\git-update_hostparser.bat")) {
-        // Do something
-        console.log("Detected \"\\hots-parser\\\" folder ...", )
-    }
-    else
-    {
-        console.log("Folder \"\\hots-parser\\\" could not be found in the root. Deepstorm will try to gather the files...", )
-    
+    CheckHostReplayParser(){
+        console.log("Checking for required libraries.", )
+        if (fs.existsSync(".\\git-update_hostparser.bat")) {
+            // Do something
+            console.log("Detected \"\\hots-parser\\\" folder ...", )
+        }
+        else
+        {
+            console.log("Folder \"\\hots-parser\\\" could not be found in the root. Deepstorm will try to gather the files...", )
+        
+        }
     }
 }
+
+
+
+
+
 
 
 // dsLogs.dsLog = dsLog;
@@ -48,4 +49,4 @@ function CheckHostReplayParser(){
 // module.exports = dsLogs;
 
 exports.Instance = Instance;
-exports.CheckHostReplayParser = CheckHostReplayParser;
+//exports.CheckHostReplayParser = CheckHostReplayParser;

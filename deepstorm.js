@@ -10,6 +10,7 @@ console.log("Testeando... %s", )
 var inst = new init.Instance();
 inst.name = "luis";
 inst.sayHello();
+inst.CheckHostReplayParser();
 
 
 
