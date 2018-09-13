@@ -1,0 +1,30 @@
+{
+  "name": "deepstorm",
+  "version": "0.0.1",
+  "description": "An replay analysis tool for Heroes of the Storm TM",
+  "main": "deepstorm.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Heroes",
+    "of",
+    "the",
+    "Storm",
+    "Machine",
+    "learning",
+    "game",
+    "stadistical",
+    "analysis"
+  ],
+  "author": "Luis Herranz Mañas",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keny91/DeepStorm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/keny91/DeepStorm/issues"
+  },
+  "homepage": "https://github.com/keny91/DeepStorm#readme"
+}
