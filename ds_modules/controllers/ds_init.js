@@ -2,6 +2,7 @@
 //const Files_env = require("")
 const fs = require('fs');
 
+
 class Instance {
     constructor(){
         this.id = "null_id"
@@ -35,11 +36,6 @@ class Instance {
         }
     }
 }
-
-
-
-
-
 
 
 // dsLogs.dsLog = dsLog;
