@@ -2,6 +2,16 @@
 
 const parser = require("./../../hots-parser/parser.js")
 
+
+// enums and other constants
+const TeamType = {
+    'Blue' : 0,
+    'Red' : 1
+  };
+  
+
+
+
 /*  Get from HostParser the patch under analysis */
 function getCurrentPatch()
 {
@@ -30,6 +40,7 @@ class Replay
 
     }
 
+    /*  From a file create the header (quick reference information) and the body (extracted and processed info) */
     constructor(file)
     {
         this.header = new ReplayHeader(file);
@@ -45,6 +56,7 @@ class ReplayHeader
     getMMR(file)
     {
         /*  Process ... looking at each player´s rank in Hostlogs (moreless significant) */
+
 
         return {
             mmr_mean: val_a,
@@ -73,6 +85,8 @@ class ReplayHeader
         this.date = match.date;
         this.rawdate = match.rawDate;
         this.tags = match.tags;
+        this.region = match.region;             // not implemented
+        this.game_lenght = match.game_lenght;   // not implemented
 
         // Estimate MMR present in the match - not present in parser.header
         MMR = getMMR(file);

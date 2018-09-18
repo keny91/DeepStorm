@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/keny91/DeepStorm/issues"
   },
-  "homepage": "https://github.com/keny91/DeepStorm#readme"
+  "homepage": "https://github.com/keny91/DeepStorm#readme",
+  "dependencies": {
+    "colors": "^1.3.2"
+  }
 }
