@@ -51,30 +51,20 @@ async function CheckRequiredFiles()
     var all_good = 0;
     console.log("Checking for required libraries. \n" );
     
-    // if fails the check -> git clone
-    if (!CheckHostReplayParser())
-    {
-        console.log("\tAttemting to clone repository ..." +" \n" );
-       
-        var ready = await CloneParserRepo();
-        
+    /* Load all check functions in an array so they can be checked at different pace */
+    var methods_sample = [CheckHostReplayParser, CheckGitUpdaterScript]; 
 
-    //     ('git://github.com/strugee/node-git-clone-or-pull.git', path.join(process.cwd(), 'node-git-clone-or-pull'), function(err) {
-    // if (err) throw err;
- 
-    // // Use repo
-    // });
-    // }
-    // else
-    // {
-    //     console.log("\tLocated HotsParser git repo" +" \n" );
-    // }
-    }
-     
-    var found_GitUpdaterScript = CheckGitUpdaterScript() ;
+    methods_sample.forEach(function (element) {
+        var check = element(); // run function 
+        // if check fails the function should have already displayed the error message
+        if (!check)
+            return false;
 
-    if (all_good)
-        console.log("Success".green +" checking for required libraries. \n" );
+    });
+
+    // out of the check loop...
+    console.log("Success".green +" checking for required libraries. \n" );
+    return true;
 }
 
 
@@ -110,9 +100,18 @@ function CheckHostReplayParser ()
     {       
         let pathname =  path.join(__dirname, "./../../",source_tree.hostparser_folder);
         console.log("\tFolder \""+pathname.red+"\" could not be found.");
+        console.log("\tAttemting to clone repository ..." +" \n" );
+       
+        var ready = CloneParserRepo();
     }
     return found;
 }
+
+
+
+
+
+
 
 
 // dsLogs.dsLog = dsLog;

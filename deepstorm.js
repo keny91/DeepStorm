@@ -8,19 +8,27 @@ const init = require("./ds_modules/controllers/ds_init");
 const replay_path = "./samples/CH_gamemode_leagueT_leagueB_000000.StormReplay";
 
 
+
 init.DisplayBuildVersion();
 
 /*  Test    */
 
-try {
-    const Parser = require('./hots-parser/parser.js');
-}
-catch(err)
+async function initProcess ()
 {
-    init.CheckRequiredFiles();
+    /* This part is supposed to be executed and waited for */
+    try {
+        const Parser = require('./hots-parser/parser.js');
+    }
+    catch(err)
+    {
+    var check = await init.CheckRequiredFiles();
+    }
+    /*  Wait to all process to end until this point  */
 }
 
 
+initProcess ();
+console.log("aaaaaaaaaaaaaaaaaaaa");
 
 /* parse a replay*/
 //var replayInfo = Parser.processReplay(replay_path, options ={});
