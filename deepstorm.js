@@ -27,11 +27,23 @@ async function initProcess ()
 }
 
 
+function main()
+{
+/*  Execute in order */
+
+// linear -> wait till done
 initProcess ();
-console.log("aaaaaaaaaaaaaaaaaaaa");
+
 
 /* parse a replay*/
 //var replayInfo = Parser.processReplay(replay_path, options ={});
 
 console.log("END");
 //Parser.getHeader(file);
+
+}
+
+
+
+// Execution
+main();

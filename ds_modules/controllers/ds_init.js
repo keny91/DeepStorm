@@ -13,7 +13,8 @@ function DisplayBuildVersion()
 {
     if (pjson) 
     {     
-        console.log("Current Build version: "+ pjson.version);
+
+        console.log("\n\nCurrent Build version: "+ pjson.version);
         found = 1;
     }
     else
@@ -42,7 +43,7 @@ async function CloneParserRepo()
 
 function GitSucces()
 {
-    console.log("Success Cloning HotsParser git repo".green +" \n" );
+    console.log("\tSuccess Cloning HotsParser git repo".green +" \n" );
 }
 
 /*  CheckRequiredFiles is an initialization function that will  */
@@ -63,7 +64,7 @@ async function CheckRequiredFiles()
     });
 
     // out of the check loop...
-    console.log("Success".green +" checking for required libraries. \n" );
+    console.log("\tSuccess".green +" checking for required libraries. \n" );
     return true;
 }
 
