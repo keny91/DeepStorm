@@ -1,7 +1,7 @@
 
 
-const parser = require("./../../hots-parser/parser.js")
-
+const parser = require("./../../hots-parser/parser.js");
+const vars = require("./../../environment/ds_vars.js");
 
 // enums and other constants
 const TeamType = {
@@ -35,10 +35,6 @@ function getCurrentPatch()
 
 class Replay
 {
-    constructor()
-    {
-
-    }
 
     /*  From a file create the header (quick reference information) and the body (extracted and processed info) */
     constructor(file)
@@ -49,6 +45,7 @@ class Replay
 
 
 }
+
 
 
 class ReplayHeader
@@ -63,14 +60,6 @@ class ReplayHeader
             mmr_max: val_b,
             mmr_min: val_c
             };
-    }
-
-    /*  Empty */
-    constructor()
-    {
-        this.replay_id = null;
-        /* nullify every property */
-
     }
 
     // requires a file to initialize properties
