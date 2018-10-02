@@ -9,9 +9,23 @@ Files_env.Hots_parser_updater = Hots_parser_updater;
 
 
 
-const Maps = {"Cursed Hollow":"Cursed Hollow",
-               "Garden Terror":"Garden Terror", 
-               "Sky Temple": "Sky Temple"};
+const Standard_Map_List = {"Cursed Hollow":"Cursed Hollow",
+            "Garden Terror":"Garden Terror", 
+            "Sky Temple": "Sky Temple",
+            "Tomb of the Spider":"Tomb of the Spider",
+            "Cursed Mines": "Cursed Mines",
+            "Towers of Doom": "Towers of Doom",
+            "Braxis Holdaout": "Braxis Holdaout",
+            "Warhead Junction": "Warhead Junction",
+            "Hanamura Temple": "Hanamura Temple",
+            "Volskaya Foundry": "Volskaya Foundry",
+            "Infernal Shrines": "Infernal Shrines",
+            "Battlefields of Eternity": "Battlefields of Eternity",
+            "Alterac Pass": "Alterac Pass"       
+          };
+
+const Brawl_Map_List = {};
+
 
  Game_env.Maps = Maps;                                                                                                                                                                                  
 // enums and other constants
@@ -25,4 +39,5 @@ const TeamType = {
 
 //module.exports = Files_env;
 exports.Files_env = Files_env;
+exports.Standard_Map_List = Standard_Map_List;
 //module.exports = Maps;

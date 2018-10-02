@@ -53,10 +53,10 @@ init.DisplayBuildVersion();
 //var replayInfo = parser_exp.processReplay(replay_path, options ={});
 
 //
-if (infoObject)
+if (!replayInfo)
 {
-    
     var replayInfo = new infoObject(replay_path);
+    
 }
    
 

@@ -18,6 +18,32 @@ function getCurrentPatch()
 
 
 }
+function GetMap(theMap)
+{
+    var maptype;
+    // search the map in our availible pool
+    vars.Standard_Map_List.forEach(element => {
+        if (element == theMap)
+        {
+            maptype = 1;
+            // we found it ... return it.
+            return [element,maptype];
+        }   
+    });
+
+    // is it a brawl
+
+
+    // If we did not find any map
+    return null;
+}
+
+
+
+function ReplayContains(Map , theReplay)
+{
+
+}
 
 
 // "replay_id":"0",
