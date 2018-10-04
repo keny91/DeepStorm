@@ -9,7 +9,7 @@ const TeamType = {
     'Red' : 1
   };
   
-
+vars.Hero_List
 
 
 /*  Get from HostParser the patch under analysis */
@@ -32,7 +32,7 @@ function GetMap(theMap)
     });
 
     // is it a brawl
-
+    
 
     // If we did not find any map
     return null;
@@ -40,7 +40,7 @@ function GetMap(theMap)
 
 
 
-function ReplayContains(Map , theReplay)
+function ReplayContainsMap(Map , theReplay)
 {
 
 }

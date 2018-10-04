@@ -24,6 +24,17 @@ class infoObject{
 /*  Test    */
 //const parser_exp = require("./hots-parser/parser.js");
 
+class headerObject
+{
+    constructor(file)
+    {
+      var options ={};
+      this.replayHeader = parser.getHeader(file);
+    };
+
+}
+
+
 async function initProcess ()
 {
     if(!parser_exp)
@@ -45,6 +56,7 @@ function main()
 init.DisplayBuildVersion();
 
 
+
 // linear -> wait till done
 //initProcess ();
 
@@ -53,10 +65,10 @@ init.DisplayBuildVersion();
 //var replayInfo = parser_exp.processReplay(replay_path, options ={});
 
 //
-if (!replayInfo)
+if (replay_path)
 {
-    var replayInfo = new infoObject(replay_path);
-    
+   // var replayInfo = new infoObject(replay_path);
+    var replayHeader = new headerObject(replay_path);
 }
    
 
