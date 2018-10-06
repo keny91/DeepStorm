@@ -18,7 +18,7 @@ function getCurrentPatch()
 
 
 }
-function GetMap(theMap)
+function GetMap(theMap, thereplay)
 {
     var maptype;
     // search the map in our availible pool
@@ -32,7 +32,11 @@ function GetMap(theMap)
     });
 
     // is it a brawl
+<<<<<<< Updated upstream
     
+=======
+    vars.Brawl_Map_List
+>>>>>>> Stashed changes
 
     // If we did not find any map
     return null;
@@ -42,7 +46,12 @@ function GetMap(theMap)
 
 function ReplayContainsMap(Map , theReplay)
 {
+    var a, b;
+    [a,b] = GetMap(theMap:Map);
+    if()
+    {
 
+    }
 }
 
 

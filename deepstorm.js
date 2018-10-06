@@ -24,6 +24,7 @@ class infoObject{
 /*  Test    */
 //const parser_exp = require("./hots-parser/parser.js");
 
+<<<<<<< Updated upstream
 class headerObject
 {
     constructor(file)
@@ -33,6 +34,8 @@ class headerObject
     };
 
 }
+=======
+>>>>>>> Stashed changes
 
 
 async function initProcess ()
