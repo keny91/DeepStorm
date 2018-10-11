@@ -30,7 +30,7 @@ const Standard_Map_List = {"Cursed Hollow":"Cursed Hollow",
 const Brawl_Map_List = {};
 
 
- Game_env.Maps = Maps;                                                                                                                                                                                  
+                                                                                                                                                                              
 // enums and other constants
 const TeamType = {
     'Blue' : 0,

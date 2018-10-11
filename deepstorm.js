@@ -3,6 +3,8 @@
 const fs = require('fs');
 const ls = require('os');
 const init = require("./ds_modules/controllers/ds_init");
+const dsParser = require("./ds_modules/controllers/ds_parser");
+const vars = require("./environment/ds_vars.js");
 //const infoObject = require("./environment/ds_vars");
 
 //const replay_sample = require("./samples/CH_gamemode_leagueT_leagueB_000000.StormReplay");
@@ -67,8 +69,9 @@ init.DisplayBuildVersion();
 //
 if (replay_path)
 {
-   // var replayInfo = new infoObject(replay_path);
-    var replayHeader = new headerObject(replay_path);
+    var replayInfo = new infoObject(replay_path);
+    //var replayHeader = new headerObject(replay_path);
+    dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List["Cursed Hollow"]);
 }
    
 
