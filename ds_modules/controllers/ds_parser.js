@@ -22,28 +22,70 @@ function GetMap(theMap)
 {
     var maptype;
     // search the map in our availible pool
-    vars.Standard_Map_List.forEach(element => {
-        if (element == theMap)
-        {
-            maptype = 1;
-            // we found it ... return it.
-            return [element,maptype];
-        }   
-    });
+    
+    var map = vars.Standard_Map_List[theMap];
+    if (map!=null)
+        maptype = "standard";
+    // vars.Standard_Map_List.forEach(element => {
+    //     if (element == theMap)
+    //     {
+    //         maptype = "standard";
+    //         // we found it ... return it.
+    //         return [element,maptype];
+    //     }   
+    // });
 
     // is it a brawl
     
 
     // If we did not find any map
-    return null;
+    return [map,maptype];
 }
 
 
 
-function ReplayContainsMap(Map , theReplay)
+function ReplayContainsMap(MyMap , theReplay)
+{
+ var ReplayMap;
+ var Maptype;
+
+ // I could quickly discard by looking at the maptype
+ [ReplayMap,Maptype]= GetMap(theReplay);
+ console.log("Map:"+ MyMap +" , Replay Map:" + ReplayMap );
+ if (theReplay == MyMap)
+ {
+    return true;
+ }
+    
+ else 
+    return false;
+
+}
+
+function ReplayContainsCharacter(MyChar , theReplay, isInWinningTeam)
+{
+ var ReplayMap;
+ var Maptype;
+
+if (isInWinningTeam)
 {
 
 }
+
+
+ // I could quickly discard by looking at the maptype
+ [ReplayMap,Maptype]= GetMap(theReplay);
+ console.log("Map:"+ MyMap +" , Replay Map:" + ReplayMap );
+ if (theReplay == MyMap)
+ {
+    return true;
+ }
+    
+ else 
+    return false;
+
+}
+
 
 
 // "replay_id":"0",
@@ -114,5 +156,6 @@ class ReplayHeader
 }
 
 
+exports.ReplayContainsMap = ReplayContainsMap;
 
 
