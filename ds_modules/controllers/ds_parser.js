@@ -18,46 +18,37 @@ function getCurrentPatch()
 
 
 }
-function GetMap(theMap)
-{
-    var maptype;
-    // search the map in our availible pool
-    
-    var map = vars.Standard_Map_List[theMap];
-    if (map!=null)
-        maptype = "standard";
-    // vars.Standard_Map_List.forEach(element => {
-    //     if (element == theMap)
-    //     {
-    //         maptype = "standard";
-    //         // we found it ... return it.
-    //         return [element,maptype];
-    //     }   
-    // });
 
-    // is it a brawl
-    
 
-    // If we did not find any map
-    return [map,maptype];
-}
+/*  Check if the replay contains the map  */
 
 
 
-function ReplayContainsMap(MyMap , theReplay)
+
+
+function ReplayContainsMap(MyMap , theReplayMap)
 {
  var ReplayMap;
- var Maptype;
+ var Map2 = theReplayMap.valueOf();
+ var Map1 = MyMap;
 
- // I could quickly discard by looking at the maptype
- [ReplayMap,Maptype]= GetMap(theReplay);
- console.log("Map:"+ MyMap +" , Replay Map:" + ReplayMap );
- if (theReplay == MyMap)
- {
+
+ if (Map2 == Map1)
     return true;
- }
+
+// for(var key in vars.Standard_Map_List){
+//     if(vars.Standard_Map_List[MyMap] == key.valueOf())
+//         return true;
+
+// }
+
+ console.log("Map:"+ MyMap +" , Replay Map:" + ReplayMap );
+//  if (theReplay == MyMap)
+//  {
+//     return true;
+//  }
     
- else 
+//  else 
     return false;
 
 }

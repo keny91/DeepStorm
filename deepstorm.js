@@ -70,8 +70,8 @@ init.DisplayBuildVersion();
 if (replay_path)
 {
     var replayInfo = new infoObject(replay_path);
-    //var replayHeader = new headerObject(replay_path);
-    dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List["Cursed Hollow"]);
+    var replayHeader = new headerObject(replay_path);
+    dsParser.ReplayContainsMap(replayInfo.replayInfo.match.map, vars.Standard_Map_List.CursedHollow);
 }
    
 

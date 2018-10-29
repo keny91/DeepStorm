@@ -6,26 +6,15 @@ var Game_env ={};
 var Hots_parser_updater = ".\\git-update_hostparser.bat";
 const attrs = require(".\\..\\hots-parser\\attr.js");
 const constants = require(".\\..\\hots-parser\\constants.js");
+// add parser?
 
 
 Files_env.Hots_parser_updater = Hots_parser_updater;
 
 
 
-const Standard_Map_List = {"Cursed Hollow":"Cursed Hollow",
-            "Garden Terror":"Garden Terror", 
-            "Sky Temple": "Sky Temple",
-            "Tomb of the Spider":"Tomb of the Spider",
-            "Cursed Mines": "Cursed Mines",
-            "Towers of Doom": "Towers of Doom",
-            "Braxis Holdaout": "Braxis Holdaout",
-            "Warhead Junction": "Warhead Junction",
-            "Hanamura Temple": "Hanamura Temple",
-            "Volskaya Foundry": "Volskaya Foundry",
-            "Infernal Shrines": "Infernal Shrines",
-            "Battlefields of Eternity": "Battlefields of Eternity",
-            "Alterac Pass": "Alterac Pass"       
-          };
+
+const Standard_Map_List = constants.MapType;
 
 const Brawl_Map_List = {};
 
