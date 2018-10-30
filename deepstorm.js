@@ -13,28 +13,6 @@ const parser = require('hots-parser');
 
 
 
-class infoObject{
-
-    constructor(file)
-    {
-      var options ={};
-      this.replayInfo = parser.processReplay(file, options);
-    };
-  
-  }
-
-/*  Test    */
-//const parser_exp = require("./hots-parser/parser.js");
-
-class headerObject
-{
-    constructor(file)
-    {
-      var options ={};
-      this.replayHeader = parser.getHeader(file);
-    };
-
-}
 
 
 async function initProcess ()
@@ -69,9 +47,28 @@ init.DisplayBuildVersion();
 //
 if (replay_path)
 {
-    var replayInfo = new infoObject(replay_path);
-    var replayHeader = new headerObject(replay_path);
-    dsParser.ReplayContainsMap(replayInfo.replayInfo.match.map, vars.Standard_Map_List.CursedHollow);
+    let check;
+    var replayInfo = new dsParser.infoObject(replay_path);
+    let players = replayInfo.replayInfo.players;
+    let player_ids = replayInfo.replayInfo.match.playerIDs;
+
+    player_ids.forEach(element => {
+        let a = players[element];
+        console.log(a["hero"]);
+        console.log(a["win"]);
+    });
+    
+
+    //var replayHeader = new headerObject(replay_path);
+
+    //var test = replayInfo.replayInfo.players);
+    
+    check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
+    if(!check)
+    {
+       
+    }
+
 }
    
 

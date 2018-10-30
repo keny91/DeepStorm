@@ -3,80 +3,55 @@
 const parser = require("./../../hots-parser/parser.js");
 const vars = require("./../../environment/ds_vars.js");
 
-// enums and other constants
-const TeamType = {
-    'Blue' : 0,
-    'Red' : 1
-  };
-  
-vars.Hero_List
-
-
-/*  Get from HostParser the patch under analysis */
-function getCurrentPatch()
-{
-
-
-}
-
 
 /*  Check if the replay contains the map  */
-
-
-
-
-
-function ReplayContainsMap(MyMap , theReplayMap)
+function ReplayContainsMap(replay_info  , theReplayMap)
 {
- var ReplayMap;
- var Map2 = theReplayMap.valueOf();
- var Map1 = MyMap;
+
+    
+ let Map2 = theReplayMap.valueOf();
+ let Map1 = replay_info.replayInfo.match.map;
 
 
  if (Map2 == Map1)
     return true;
 
-// for(var key in vars.Standard_Map_List){
-//     if(vars.Standard_Map_List[MyMap] == key.valueOf())
-//         return true;
-
-// }
-
- console.log("Map:"+ MyMap +" , Replay Map:" + ReplayMap );
-//  if (theReplay == MyMap)
-//  {
-//     return true;
-//  }
-    
-//  else 
-    return false;
-
+return false;
 }
 
-function ReplayContainsCharacter(MyChar , theReplay, isInWinningTeam)
+
+
+
+/*  Check if character participated in match   (and if is in winning team)  */
+function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam)
 {
  var ReplayMap;
  var Maptype;
 
+ let players = replayInfo.replayInfo.players;
+ let player_ids = replayInfo.replayInfo.match.playerIDs;
+
+ // use identifiers to navigate the objects
+ player_ids.forEach(element => {
+     let player = players[element];
+     console.log(a["hero"]);
+     console.log(a["win"]);
+ });
+ 
+
 if (isInWinningTeam)
 {
+    if(1)
+    {
 
+    }
+}
+
+return false;
 }
 
 
- // I could quickly discard by looking at the maptype
- [ReplayMap,Maptype]= GetMap(theReplay);
- console.log("Map:"+ MyMap +" , Replay Map:" + ReplayMap );
- if (theReplay == MyMap)
- {
-    return true;
- }
-    
- else 
-    return false;
-
-}
-
+/*  Check if character belongs to winning players   */ 
 
 
 // "replay_id":"0",
@@ -106,7 +81,31 @@ class Replay
 }
 
 
+class infoObject{
+    
+    constructor(file)
+    {
+      var options ={};
+      this.replayInfo = parser.processReplay(file, options);
+      
+    };
+}
 
+/*  Test    */
+//const parser_exp = require("./hots-parser/parser.js");
+
+class headerObject
+{
+    constructor(file)
+    {
+      var options ={};
+      this.replayHeader = parser.getHeader(file);
+    };
+
+}
+
+
+// ignore for now
 class ReplayHeader
 {
     getMMR(file)
@@ -148,5 +147,4 @@ class ReplayHeader
 
 
 exports.ReplayContainsMap = ReplayContainsMap;
-
-
+exports.infoObject = infoObject;
