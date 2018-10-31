@@ -28,25 +28,33 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam)
  var ReplayMap;
  var Maptype;
 
- let players = replayInfo.replayInfo.players;
- let player_ids = replayInfo.replayInfo.match.playerIDs;
+ let players = replay_info.replayInfo.players;
+ let player_ids = replay_info.replayInfo.match.playerIDs;
 
  // use identifiers to navigate the objects
+ // THIS FOR IS RETURNING THE TRUE VALUE ITSELF
  player_ids.forEach(element => {
+
      let player = players[element];
-     console.log(a["hero"]);
-     console.log(a["win"]);
+     //let a = player["hero"];
+     if(theHero.valueOf() == player["hero"])
+     {
+        if(isInWinningTeam)
+        {
+            if(player["win"] == true) return true;
+            else return false;
+                
+        }
+        else
+        {
+            return true;
+        }
+
+     }
+    //  console.log(a["hero"]);
+    //  console.log(a["win"]);
  });
  
-
-if (isInWinningTeam)
-{
-    if(1)
-    {
-
-    }
-}
-
 return false;
 }
 
@@ -147,4 +155,5 @@ class ReplayHeader
 
 
 exports.ReplayContainsMap = ReplayContainsMap;
+exports.ReplayContainsCharacter = ReplayContainsCharacter;
 exports.infoObject = infoObject;

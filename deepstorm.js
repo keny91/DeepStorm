@@ -49,14 +49,14 @@ if (replay_path)
 {
     let check;
     var replayInfo = new dsParser.infoObject(replay_path);
-    let players = replayInfo.replayInfo.players;
-    let player_ids = replayInfo.replayInfo.match.playerIDs;
+    // let players = replayInfo.replayInfo.players;
+    // let player_ids = replayInfo.replayInfo.match.playerIDs;
 
-    player_ids.forEach(element => {
-        let a = players[element];
-        console.log(a["hero"]);
-        console.log(a["win"]);
-    });
+    // player_ids.forEach(element => {
+    //     let a = players[element];
+    //     console.log(a["hero"]);
+    //     console.log(a["win"]);
+    // });
     
 
     //var replayHeader = new headerObject(replay_path);
@@ -64,9 +64,17 @@ if (replay_path)
     //var test = replayInfo.replayInfo.players);
     
     check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
-    if(!check)
+    
+    if(check)
     {
-       
+        console.log("Map detected!");
+    }
+
+    check = dsParser.ReplayContainsCharacter(replayInfo, vars.Hero_List.LiLi, true);
+    
+    if(check)
+    {
+        console.log("Character detected!");
     }
 
 }
