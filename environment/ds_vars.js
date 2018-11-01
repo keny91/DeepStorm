@@ -20,20 +20,53 @@ const Standard_Map_List = constants.MapType;
 
 const Brawl_Map_List = {};
 
-class playerData
-{
+/* Search and create  a build from the player data*/
+var HeroBuild =  class build {
+  constructor(playerId, replay_info)
+    {
+      if(replay_info instanceof vars.infoObject)
+        return null;
+      
+      this.talentSequence = new talentSequence(replayInfo);
+      this.talentTierUnlocked= -1; // checkfunctionFromLVL()
+      this.teamLVL = -1;   // 
+      
+    };
 
+  function CalculateTalentTier()
+  {
+
+    
+  }
+}
+
+
+/* Create a playerData from the dataObject given the Id */
+var playerData = class playerData
+{
+  constructor(playerId, replay_info)
+    {
+      if(replay_info instanceof vars.infoObject)
+        return null;
+      
+      this.options ={};
+      this.build = new HeroBuild();
+      
+    };
 
 }
 
 
-/* Object containing the  replaydata, along with our processed information*/
+/* Object containing the  replaydata, along with our processed information  */
+/* Teams, players,  */
 class infoObject{
     
   constructor(file)
   {
-    var options ={};
+    this.options ={};
     this.replayInfo = parser.processReplay(file, options);
+    this.winPlayers = {};  // empty for now, fill teams
+    this.losePlayers = {};
     
   };
 }

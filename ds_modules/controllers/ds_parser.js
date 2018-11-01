@@ -84,7 +84,7 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
     return found;
 }
 
-
+/*  Given a player_id from this match, try to load and process information into the structure   */
 function ReadPlayerData (replay_info, player_id_ingame)
 {
     if (replay_info instanceof vars.infoObject) 
