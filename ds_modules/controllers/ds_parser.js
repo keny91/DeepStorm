@@ -7,57 +7,93 @@ const vars = require("./../../environment/ds_vars.js");
 /*  Check if the replay contains the map  */
 function ReplayContainsMap(replay_info  , theReplayMap)
 {
+    if (replay_info instanceof vars.infoObject) 
+    {
+        //console.log("Class object type detected!");
 
-    
- let Map2 = theReplayMap.valueOf();
- let Map1 = replay_info.replayInfo.match.map;
+        // store in variables to bbetter study js behabiour
+        let Map2 = theReplayMap.valueOf();
+        let Map1 = replay_info.replayInfo.match.map;
 
-
- if (Map2 == Map1)
-    return true;
-
-return false;
-}
-
-
-
-
-/*  Check if character participated in match   (and if is in winning team)  */
-function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam)
-{
- var ReplayMap;
- var Maptype;
-
- let players = replay_info.replayInfo.players;
- let player_ids = replay_info.replayInfo.match.playerIDs;
-
- // use identifiers to navigate the objects
- // THIS FOR IS RETURNING THE TRUE VALUE ITSELF
- player_ids.forEach(element => {
-
-     let player = players[element];
-     //let a = player["hero"];
-     if(theHero.valueOf() == player["hero"])
-     {
-        if(isInWinningTeam)
-        {
-            if(player["win"] == true) return true;
-            else return false;
-                
-        }
-        else
-        {
+        // is it the map we are searching for?
+        if (Map2 == Map1)
             return true;
-        }
-
-     }
-    //  console.log(a["hero"]);
-    //  console.log(a["win"]);
- });
- 
-return false;
+    }
+    else
+    {
+        console.debug("Object 'replay_info' is not an instance of infoObject");
+    }
+    return false;
 }
 
+
+
+
+
+
+/* Character: Name[string] - Build:1213211[string or array?] - BuildWeight(mapDependent) [aray?]*/
+/*  Check if character participated in match   (and if is in winning team)  */
+function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
+{
+    let found =-1;
+    if (replay_info instanceof vars.infoObject) 
+    {
+        var ReplayMap;
+        var Maptype;
+
+        let players = replay_info.replayInfo.players;
+        let player_ids = replay_info.replayInfo.match.playerIDs;
+        
+
+        // check all players by players_ids
+        for (let player in player_ids)
+        {
+            //let player = players[element];
+            let player_id = player_ids[player];
+            let player_data = players[player_id];
+            if(theHero.valueOf() == player_data["hero"])
+            {
+                /* Extra check if we are looking for a match where the hero WINS */
+                if(isInWinningTeam)
+                {
+                    if(player_data["win"] == true)
+                    {
+                        found =  true;    
+                    } 
+                    else 
+                    {
+                        found =   false;
+                    }  
+                }
+
+                /* If does not matter if win or loss */
+                else
+                {
+                    found =  true;
+                }
+                // character was found, lets break here
+                break;  
+            }
+        }
+    }
+    else
+    {
+        console.debug("Object 'replay_info' is not an instance of infoObject");
+    }
+
+    return found;
+}
+
+
+function ReadPlayerData (replay_info, player_id_ingame)
+{
+    if (replay_info instanceof vars.infoObject) 
+    {
+/// SEGUIR AQUIIIIII
+
+    return [hero, build, stadistics];
+
+}
 
 /*  Check if character belongs to winning players   */ 
 
@@ -89,28 +125,9 @@ class Replay
 }
 
 
-class infoObject{
-    
-    constructor(file)
-    {
-      var options ={};
-      this.replayInfo = parser.processReplay(file, options);
-      
-    };
-}
 
-/*  Test    */
-//const parser_exp = require("./hots-parser/parser.js");
 
-class headerObject
-{
-    constructor(file)
-    {
-      var options ={};
-      this.replayHeader = parser.getHeader(file);
-    };
 
-}
 
 
 // ignore for now
@@ -156,4 +173,4 @@ class ReplayHeader
 
 exports.ReplayContainsMap = ReplayContainsMap;
 exports.ReplayContainsCharacter = ReplayContainsCharacter;
-exports.infoObject = infoObject;
+

@@ -48,20 +48,7 @@ init.DisplayBuildVersion();
 if (replay_path)
 {
     let check;
-    var replayInfo = new dsParser.infoObject(replay_path);
-    // let players = replayInfo.replayInfo.players;
-    // let player_ids = replayInfo.replayInfo.match.playerIDs;
-
-    // player_ids.forEach(element => {
-    //     let a = players[element];
-    //     console.log(a["hero"]);
-    //     console.log(a["win"]);
-    // });
-    
-
-    //var replayHeader = new headerObject(replay_path);
-
-    //var test = replayInfo.replayInfo.players);
+    var replayInfo = new vars.infoObject(replay_path);
     
     check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     
