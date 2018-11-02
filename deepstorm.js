@@ -64,6 +64,10 @@ if (replay_path)
         console.log("Character detected!");
     }
 
+    var a = dsParser.GetAllPlayersData(replayInfo);
+
+   
+
 }
    
 

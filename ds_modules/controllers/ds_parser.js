@@ -36,10 +36,15 @@ function ReplayContainsMap(replay_info  , theReplayMap)
 function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
 {
     let found =-1;
+    let compare_build = -1;
+
+    if (build != null)
+        compare_build=1;
+
+    // Add compare build check -> need to generate build
+
     if (replay_info instanceof vars.infoObject) 
     {
-        var ReplayMap;
-        var Maptype;
 
         let players = replay_info.replayInfo.players;
         let player_ids = replay_info.replayInfo.match.playerIDs;
@@ -84,16 +89,60 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
     return found;
 }
 
+
+
+
+
 /*  Given a player_id from this match, try to load and process information into the structure   */
-function ReadPlayerData (replay_info, player_id_ingame)
+function ReadPlayerData (replay_info, player_index_ingame)
 {
     if (replay_info instanceof vars.infoObject) 
     {
 /// SEGUIR AQUIIIIII
 
-    return [hero, build, stadistics];
+        var new_player_class = new vars.playerData(replay_info, player_index_ingame);
 
+    }
+    return [hero, build, stadistics];
 }
+
+
+
+
+
+function GetAllPlayersData(replay_info)
+{
+    var players = {};
+    let players_list = replay_info.replayInfo.players;
+    let player_ids = replay_info.replayInfo.match.playerIDs;
+
+    // Check all players taking part in the match
+    for (let player in player_ids)
+    {
+        let player_id = player_ids[player];
+        let player_data = players_list[player_id];
+
+        // Add playerIndex to winning or losing team list
+        if(player_data["win"] == true)
+        {
+            replay_info.winPlayers.push(player_id);  
+        } 
+        else
+        {
+            replay_info.losePlayers.push(player_id);  
+        }
+
+        ReadPlayerData (replay_info, player_id)
+
+
+        //if(PlayerWins())
+    }
+
+    return players;
+}
+
+
+
 
 /*  Check if character belongs to winning players   */ 
 
@@ -173,4 +222,4 @@ class ReplayHeader
 
 exports.ReplayContainsMap = ReplayContainsMap;
 exports.ReplayContainsCharacter = ReplayContainsCharacter;
-
+exports.GetAllPlayersData = GetAllPlayersData;

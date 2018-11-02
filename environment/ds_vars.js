@@ -20,41 +20,60 @@ const Standard_Map_List = constants.MapType;
 
 const Brawl_Map_List = {};
 
+
+
+
+
 /* Search and create  a build from the player data*/
-var HeroBuild =  class build {
+class build {
   constructor(playerId, replay_info)
     {
       if(replay_info instanceof vars.infoObject)
         return null;
       
       this.talentSequence = new talentSequence(replayInfo);
-      this.talentTierUnlocked= -1; // checkfunctionFromLVL()
+      //this.talentTierUnlocked= -1; // checkfunctionFromLVL() <- based on lvl will be messed by Chromie
       this.teamLVL = -1;   // 
-      
+      // PASS TALENTS FROM TEXT TO NUMBERS
     };
-
-  function CalculateTalentTier()
+  
+  get lastTalentTier()
   {
 
-    
+    return this.lastTalentTier;
   }
+
 }
 
 
+
+
+
+
+
 /* Create a playerData from the dataObject given the Id */
-var playerData = class playerData
+class playerData
 {
-  constructor(playerId, replay_info)
+  constructor(replay_info, playerId )
     {
-      if(replay_info instanceof vars.infoObject)
-        return null;
-      
-      this.options ={};
+    
+      let players_list = replay_info.replayInfo.players;
+      let playerdata =  players_list[playerId];  // localized the data for that player
+
+      // Now put data to use
+      // PASS TALENTS FROM TEXT TO NUMBERS
+      this.playerName = playerId["name"];
+
       this.build = new HeroBuild();
       
     };
 
 }
+
+
+
+
+
 
 
 /* Object containing the  replaydata, along with our processed information  */
@@ -63,10 +82,10 @@ class infoObject{
     
   constructor(file)
   {
-    this.options ={};
+    var options ={};
     this.replayInfo = parser.processReplay(file, options);
-    this.winPlayers = {};  // empty for now, fill teams
-    this.losePlayers = {};
+    this.winPlayers = [];  // empty for now, fill teams
+    this.losePlayers = [];
     
   };
 }
@@ -89,7 +108,7 @@ exports.Files_env = Files_env;
 exports.Standard_Map_List = Standard_Map_List;
 exports.Hero_List = attrs.heroAttribute;
 exports.infoObject = infoObject;
-
+exports.playerData = playerData;
 /* Split this into my own labels */
 //exports.game_data = constants.UnitType
 exports.game_data = constants;
