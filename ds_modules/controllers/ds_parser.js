@@ -103,7 +103,7 @@ function ReadPlayerData (replay_info, player_index_ingame)
         var new_player_class = new vars.playerData(replay_info, player_index_ingame);
 
     }
-    return [hero, build, stadistics];
+    return {};
 }
 
 
