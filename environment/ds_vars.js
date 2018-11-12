@@ -7,9 +7,7 @@ var Hots_parser_updater = ".\\git-update_hostparser.bat";
 const attrs = require(".\\..\\hots-parser\\attr.js");
 const constants = require(".\\..\\hots-parser\\constants.js");
 const parser = require("./../hots-parser/parser.js");
-const curl = new (require( 'curl-request' ))();
-const request = require('request');
-// add parser?
+
 
 
 Files_env.Hots_parser_updater = Hots_parser_updater;
@@ -47,34 +45,10 @@ class HeroBuild {
   getTalentSequence(playerdata)
   {
 
-    //// curl experiment
 
 
 
-    var headers = {
-        'accept': 'application/json'
-    };
-    
-    var options = {
-        url: 'https://hotsapi.net/api/v1/talents/KaelthasFlamestrikeConvection',
-        headers: headers
-    };
-    
-    var cap_body;
-    
-    request(options ,function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log(body);
-        cap_body = body;
-      }
-      else
-      console.log("skipped");
-    });
 
-    console.log("...");
-    wait(5000);
-    console.log("...");
-    ////
 
 
     let a =playerdata["hero"];

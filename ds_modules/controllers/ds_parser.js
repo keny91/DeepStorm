@@ -98,7 +98,7 @@ function ReadPlayerData (replay_info, player_index_ingame)
 {
     if (replay_info instanceof vars.infoObject) 
     {
-/// SEGUIR AQUIIIIII
+    /// Unfinished
 
         var new_player_class = new vars.playerData(replay_info, player_index_ingame);
 
