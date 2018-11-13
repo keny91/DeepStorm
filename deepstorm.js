@@ -5,15 +5,17 @@ const ls = require('os');
 const init = require("./ds_modules/controllers/ds_init");
 const dsParser = require("./ds_modules/controllers/ds_parser");
 const vars = require("./environment/ds_vars.js");
-const curl = new (require( 'curl-request' ))();
-const request = require('request');
+var csv = require("fast-csv");
 const fetch = require('node-fetch');
+
 
 //const infoObject = require("./environment/ds_vars");
 
 //const replay_sample = require("./samples/CH_gamemode_leagueT_leagueB_000000.StormReplay");
 const replay_path = "./samples/CH_gamemode_leagueT_leagueB_000000.StormReplay";
-const parser = require('hots-parser');
+
+// this is an alternative way to invoke hots-parser
+//const parser = require('hots-parser');
 
 
 function wait(ms){
@@ -40,68 +42,52 @@ async function initProcess ()
 }
 
 
+/* Test */
+async function ReadHotslogs_30daysfile()
+{
+    var stream = fs.createReadStream("ReplayCharacters.csv");
+    var csvStream = csv()
+        .on("data", function(data){
+            console.log(data);
+        })
+        .on("end", function(){
+            console.log("done");
+        });
+    
+    await stream.pipe(csvStream);
+}
+
+
+/* Request test */
 async function MakeHotsapiRequest()
 {
-
-    const getData = async url => {
-        try {
-            const response = await fetch(url);
-            const json = await response.json();
-            console.log(json);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    
-    return new Promise(function(fulfill, reject){
-        const url = 'https://hotsapi.net/api/v1/talents/KaelthasFlamestrikeConvection';
-
-
-    })
-    //
-    
-    // var headers = {
-    //     'accept': 'application/json'
-    // };
-    
-    // var options = {
-    //     url: 'https://hotsapi.net/api/v1/talents/KaelthasFlamestrikeConvection',
-    //     headers: headers
-    // };
-    
-    // var cap_body;
-    
-    // request(options ,function(error, response, body) {
-    //   if (!error && response.statusCode == 200) {
-    //     console.log(body);
-    //     cap_body = body;
-    //   }
-    //   else
-    //   console.log("skipped");
-    // });
 
     const url = 'https://hotsapi.net/api/v1/talents/KaelthasFlamestrikeConvection';
     const getData = async url => {
       try {
         const response = await fetch(url);
         const json = await response.json();
-        console.log(json);
+        //console.log(json);
+        return json;
       } catch (error) {
         console.log(error);
       }
     };
-    getData(url);
+    j = getData(url);
     ////
+    return j;
 } 
 
 
-function main()
+async function main()
 {
 /*  Execute in order */
 init.DisplayBuildVersion();
 
 
 
+var a = await MakeHotsapiRequest();
+console.log(a);
 // linear -> wait till done
 //initProcess ();
 
@@ -133,7 +119,7 @@ if (replay_path)
 
 
 
-    var a = dsParser.GetAllPlayersData(replayInfo);
+    var a =  await dsParser.GetAllPlayersData(replayInfo);
 
    
 
@@ -141,26 +127,9 @@ if (replay_path)
    
 
 console.log("END");
-//Parser.getHeader(file);
-
 }
 
 
-// function getToken(callback){
-//     //const result = await MakeHotsapiRequest();;
-//     MakeHotsapiRequest();
-//     callback();
-//     //return result;
-// }
-
-
-// getToken(function(){
-//     main();
-// });
-
-// Execution
-MakeHotsapiRequest().then(main);
-//getSomeAsyncData().then(main());
- //main();
+main();
 // getToken(main());
 
