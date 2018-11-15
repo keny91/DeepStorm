@@ -9,7 +9,7 @@ var csv = require("fast-csv");
 const fetch = require('node-fetch');
 
 
-//const infoObject = require("./environment/ds_vars");
+//const StormData = require("./environment/ds_vars");
 
 //const replay_sample = require("./samples/CH_gamemode_leagueT_leagueB_000000.StormReplay");
 const replay_path = "./samples/CH_gamemode_leagueT_leagueB_000000.StormReplay";
@@ -99,7 +99,7 @@ console.log(a);
 if (replay_path)
 {
     let check;
-    var replayInfo = new vars.infoObject(replay_path);
+    var replayInfo = new vars.StormData(replay_path);
     
     check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     
@@ -119,7 +119,7 @@ if (replay_path)
 
 
 
-    var a =  await dsParser.GetAllPlayersData(replayInfo);
+    // var a =  await dsParser.GetAllPlayersData(replayInfo);
 
    
 

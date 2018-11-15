@@ -7,7 +7,7 @@ const vars = require("./../../environment/ds_vars.js");
 /*  Check if the replay contains the map  */
 function ReplayContainsMap(replay_info  , theReplayMap)
 {
-    if (replay_info instanceof vars.infoObject) 
+    if (replay_info instanceof vars.StormData) 
     {
         //console.log("Class object type detected!");
 
@@ -21,7 +21,7 @@ function ReplayContainsMap(replay_info  , theReplayMap)
     }
     else
     {
-        console.debug("Object 'replay_info' is not an instance of infoObject");
+        console.debug("Object 'replay_info' is not an instance of StormData");
     }
     return false;
 }
@@ -43,7 +43,7 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
 
     // Add compare build check -> need to generate build
 
-    if (replay_info instanceof vars.infoObject) 
+    if (replay_info instanceof vars.StormData) 
     {
 
         let players = replay_info.replayInfo.players;
@@ -83,7 +83,7 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
     }
     else
     {
-        console.debug("Object 'replay_info' is not an instance of infoObject");
+        console.debug("Object 'replay_info' is not an instance of StormData");
     }
 
     return found;
@@ -92,54 +92,6 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
 
 
 
-
-/*  Given a player_id from this match, try to load and process information into the structure   */
-function ReadPlayerData (replay_info, player_index_ingame)
-{
-    if (replay_info instanceof vars.infoObject) 
-    {
-    /// Unfinished
-
-        var new_player_class = new vars.playerData(replay_info, player_index_ingame);
-
-    }
-    return {};
-}
-
-
-
-
-
-function GetAllPlayersData(replay_info)
-{
-    var players = {};
-    let players_list = replay_info.replayInfo.players;
-    let player_ids = replay_info.replayInfo.match.playerIDs;
-
-    // Check all players taking part in the match
-    for (let player in player_ids)
-    {
-        let player_id = player_ids[player];
-        let player_data = players_list[player_id];
-
-        // Add playerIndex to winning or losing team list
-        if(player_data["win"] == true)
-        {
-            replay_info.winPlayers.push(player_id);  
-        } 
-        else
-        {
-            replay_info.losePlayers.push(player_id);  
-        }
-
-        ReadPlayerData (replay_info, player_id)
-
-
-        //if(PlayerWins())
-    }
-
-    return players;
-}
 
 
 
@@ -222,4 +174,4 @@ class ReplayHeader
 
 exports.ReplayContainsMap = ReplayContainsMap;
 exports.ReplayContainsCharacter = ReplayContainsCharacter;
-exports.GetAllPlayersData = GetAllPlayersData;
+

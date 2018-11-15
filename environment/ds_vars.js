@@ -45,12 +45,6 @@ class HeroBuild {
   getTalentSequence(playerdata)
   {
 
-
-
-
-
-
-
     let a =playerdata["hero"];
     let b =playerdata["build"];
     let talents = playerdata["talents"];
@@ -77,7 +71,8 @@ class playerData
 
       // Now put data to use
       // PASS TALENTS FROM TEXT TO NUMBERS
-      this.playerName = playerId["name"];
+      this.playerName = playerdata["name"];
+      this.win = playerdata["win"];
 
       this.build = new HeroBuild(playerdata);
       
@@ -87,26 +82,73 @@ class playerData
 
 
 
+/*  Given a player_id from this match, try to load and process information into the structure   */
+function ReadPlayerData (replay_info, player_index_ingame)
+{
+    if (replay_info instanceof StormData) 
+    {
+    /// Unfinished
 
+        return new playerData(replay_info, player_index_ingame);
+
+    }
+    return {NULL};
+}
 
 
 
 /* Object containing the  replaydata, along with our processed information  */
 /* Teams, players,  */
-class infoObject{
+class StormData{
     
   constructor(file)
   {
     var options ={};
     this.replayInfo = parser.processReplay(file, options);
+
+
     this.winPlayers = [];  // empty for now, fill teams
     this.losePlayers = [];
+
+    this.ProcessAllPlayersData();
     
   };
+
+  /* After this function runs, we will have all the data we need in our structure. We won´t need HotsParser anymore */
+  ProcessAllPlayersData()
+  {
+      let players_list = this.replayInfo.players;
+      let player_ids = this.replayInfo.match.playerIDs;
+
+      // Check all players taking part in the match
+      for (let player in player_ids)
+      {
+
+        let player_id = player_ids[player];
+        //let player_data = players_list[player_id];
+
+        let playerdata = ReadPlayerData (this, player_id);
+
+        // Add playerIndex to winning or losing team list
+        if(playerdata["win"] == true)
+        {
+            this.winPlayers.push(player_id);  
+        } 
+        else
+        {
+             this.losePlayers.push(player_id);  
+        }
+
+          
+      /* More */
+
+      }
+
+      return players;
+  }
 }
 
-/*  Test    */
-//const parser_exp = require("./hots-parser/parser.js");
+
 
 class headerObject
 {
@@ -122,7 +164,7 @@ class headerObject
 exports.Files_env = Files_env;
 exports.Standard_Map_List = Standard_Map_List;
 exports.Hero_List = attrs.heroAttribute;
-exports.infoObject = infoObject;
+exports.StormData = StormData;
 exports.playerData = playerData;
 /* Split this into my own labels */
 //exports.game_data = constants.UnitType
