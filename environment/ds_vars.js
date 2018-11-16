@@ -95,6 +95,57 @@ function ReadPlayerData (replay_info, player_index_ingame)
     return {NULL};
 }
 
+class Team 
+{
+  constructor(isWinner)
+  {
+    // declare empty players array
+    //this.Players = new playerData();
+    this.Players = []; // array declaration
+    this.nof_players_processed = 0; 
+    this.win = isWinner;
+
+    /* Add accumulated stats reference */
+
+    /* Team model -> base on endgame stats, each player will be labelled by their contribution to the team*/
+    // - number should be contrasted with those players of similar RANK/SKILL on this MAP
+    // - number should also be measured by an estimated MAX possible stat reached. (MAYBE NOT) 
+
+
+    /*  Team labels ->  labels match those ingame. EX) 2 tank + bruiser + range_dmg + healer  */
+    // - Based on character -> set role by searching up a database
+
+
+    /* Team stadistics containing relation to player, or somekind of accumulated value */
+
+  }
+
+
+  /* Internal function to add a playerData to a specific team */
+  Addplayer(player)
+  {
+    if (player instanceof playerData) 
+    {
+      // verify that we are putting a win/lose player in the right team
+      if(player.win ==! this.win) 
+        return null;
+      
+      
+      this.Players.push(player); // push not valid for objects
+
+      this.nof_players_processed ++;
+      
+
+    }
+    else
+    {
+      return null;
+    }
+  }
+
+}
+
+
 
 
 /* Object containing the  replaydata, along with our processed information  */
@@ -104,11 +155,12 @@ class StormData{
   constructor(file)
   {
     var options ={};
+    /* Read info directly using the hots-parser API */
     this.replayInfo = parser.processReplay(file, options);
 
-
-    this.winPlayers = [];  // empty for now, fill teams
-    this.losePlayers = [];
+    // empty for now, fill teams
+    this.winTeam = new Team(true); // win team
+    this.loseTeam = new Team(false); // win team
 
     this.ProcessAllPlayersData();
     
@@ -131,12 +183,14 @@ class StormData{
 
         // Add playerIndex to winning or losing team list
         if(playerdata["win"] == true)
-        {
-            this.winPlayers.push(player_id);  
+        { 
+          this.winTeam.Addplayer(playerdata);
+            //this.winPlayers.push(player_id);  
         } 
         else
         {
-             this.losePlayers.push(player_id);  
+          this.loseTeam.Addplayer(playerdata);
+             //this.losePlayers.push(player_id);  
         }
 
           
