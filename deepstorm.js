@@ -33,7 +33,7 @@ async function initProcess ()
     /* This part is supposed to be executed and waited for */
         try {
             // no longer here
-        }
+        } 
         catch(err)
         {
             var check = await init.CheckRequiredFiles();

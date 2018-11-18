@@ -31,6 +31,11 @@ function wait(ms){
 }
 
 
+function LoopsToSeconds(loops)
+{
+  return parser.loopsToSeconds(loops);
+}
+
 /* Search and create  a build from the player data*/
 class HeroBuild {
   constructor(playerdata)
@@ -55,7 +60,14 @@ class HeroBuild {
 }
 
 
+class XP_Breakdown
+{
+  constructor(replay_info)
+  {
 
+  }
+
+}
 
 
 
@@ -95,6 +107,39 @@ function ReadPlayerData (replay_info, player_index_ingame)
     return {NULL};
 }
 
+
+
+
+class GameData 
+{
+  constructor(replaydata)
+  {
+    this.firstFortbyWinningTeam = -1;
+    this.firstKeepbyWinningTeam = -1;
+    this.firstObjectivebyWinningTeam = -1;
+    this.firstPickbyWinningTeam = -1;
+    this.matchLenghtLoops = -1;
+    this.matchStartLoops = -1;
+    this.map = "";
+    this.mode = -1;
+    this.winnerTeamID;
+  }
+
+  setGameData (replayInfo)
+  {
+    this.firstFortbyWinningTeam = replaydata.match.firstFortWin;
+    this.firstKeepbyWinningTeam = replaydata.match.firstKeepWin;
+    this.firstObjectivebyWinningTeam = replaydata.match.firstObjectiveWin;
+    this.firstPickbyWinningTeam = replaydata.match.firstPickWin;
+    this.matchLenghtLoops = replaydata.match.loopLength;
+    this.matchStartLoops = replaydata.match.loopGameStart;
+    this.map = replaydata.match.map;
+    this.mode = replaydata.match.mode;
+    
+  }
+}
+
+
 class Team 
 {
   constructor(isWinner)
@@ -104,6 +149,9 @@ class Team
     this.Players = []; // array declaration
     this.nof_players_processed = 0; 
     this.win = isWinner;
+    this.teamLVL =-1;
+    this.teamTakeDowns = -1;
+    this.teamDeaths = -1;
 
     /* Add accumulated stats reference */
 
@@ -143,6 +191,11 @@ class Team
     }
   }
 
+  set teamTakeDowns (value)
+  {
+    if (value )
+    /* ERRROR HERE */
+  }
 }
 
 
@@ -161,10 +214,37 @@ class StormData{
     // empty for now, fill teams
     this.winTeam = new Team(true); // win team
     this.loseTeam = new Team(false); // win team
+    this.winnerTeamID = this.replayInfo.match.winner;
+
+    // put this somewhere, not in the constructor
+    if(winnerTeamID = 0)
+    {
+      this.winTeam.teamTakeDowns = this.replayInfo.match.team0Takedowns;
+    }
+    else
+    {
+
+    }
+
+
+
+    this.gameData = new GameData();
+
+
+    this.patchBuild = this.replayInfo.match.version;
 
     this.ProcessAllPlayersData();
-    
+    this.ProcessReplayData();
+
+
   };
+
+
+  ProcessReplayData()
+  {
+    this.replayInfo.match
+
+  }
 
   /* After this function runs, we will have all the data we need in our structure. We won´t need HotsParser anymore */
   ProcessAllPlayersData()
