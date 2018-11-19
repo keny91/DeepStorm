@@ -36,25 +36,36 @@ function LoopsToSeconds(loops)
   return parser.loopsToSeconds(loops);
 }
 
-/* Search and create  a build from the player data*/
+/* Search and create  a build from the player data:
+A tier can only be selected if we are pass that talent tier
+*/
 class HeroBuild {
-  constructor(playerdata)
+  constructor(statData)
     {
       
-      this.talentSequence = this.getTalentSequence(playerdata);
+      this.talentSequence = this.getTalentSequence(statData);
+      this.talentTier_1 = -1;
+      this.talentTier_2 = -1;
+      this.talentTier_3 = -1;
+      this.talentTier_4 = -1;
+      this.talentTier_5 = -1;
+      this.talentTier_6 = -1;
+      this.talentTier_7 = -1;
       //this.talentTierUnlocked= -1; // checkfunctionFromLVL() <- based on lvl will be messed by Chromie
       this.teamLVL = -1;   // 
       // PASS TALENTS FROM TEXT TO NUMBERS
     };
   
-  getTalentSequence(playerdata)
+  getTalentSequence(statData)
   {
-
-    let a =playerdata["hero"];
-    let b =playerdata["build"];
-    let talents = playerdata["talents"];
-    talents
-    return this.lastTalentTier;
+    this.talentTier_1 = statData["Tier1Talent"];
+    this.talentTier_2 = statData["Tier2Talent"];
+    this.talentTier_3 = statData["Tier3Talent"];
+    this.talentTier_4 = statData["Tier4Talent"];
+    this.talentTier_5 = statData["Tier5Talent"];
+    this.talentTier_6 = statData["Tier6Talent"];
+    this.talentTier_7 = statData["Tier7Talent"];
+    return 1;
   }
 
 }
@@ -85,8 +96,9 @@ class playerData
       // PASS TALENTS FROM TEXT TO NUMBERS
       this.playerName = playerdata["name"];
       this.win = playerdata["win"];
+      this.stats =playerdata["gameStats"];
 
-      this.build = new HeroBuild(playerdata);
+      this.build = new HeroBuild(this.stats);
       
     };
 
