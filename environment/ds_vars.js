@@ -125,7 +125,7 @@ class GameData
     this.winnerTeamID;
   }
 
-  setGameData (replayInfo)
+  setGameData (replaydata)
   {
     this.firstFortbyWinningTeam = replaydata.match.firstFortWin;
     this.firstKeepbyWinningTeam = replaydata.match.firstKeepWin;
@@ -150,8 +150,8 @@ class Team
     this.nof_players_processed = 0; 
     this.win = isWinner;
     this.teamLVL =-1;
-    this.teamTakeDowns = -1;
-    this.teamDeaths = -1;
+    this.teamTakeDowns = 0;
+    this.teamDeaths = 0;
 
     /* Add accumulated stats reference */
 
@@ -191,10 +191,24 @@ class Team
     }
   }
 
-  set teamTakeDowns (value)
+  setTeamTakeDowns (value)
   {
-    if (value )
+    if (value < 0)
+      console.error("Invalid value input for teamTakeDowns: "+value);
     /* ERRROR HERE */
+    else 
+      this.teamTakeDowns = value;
+
+  }
+
+  setTeamTakeDeaths (value)
+  {
+    if (value < 0)
+    console.error("Invalid value input for teamTakeDeaths: "+value);
+    /* ERRROR HERE */
+    else 
+      this.teamDeaths = value;
+
   }
 }
 
@@ -214,21 +228,15 @@ class StormData{
     // empty for now, fill teams
     this.winTeam = new Team(true); // win team
     this.loseTeam = new Team(false); // win team
-    this.winnerTeamID = this.replayInfo.match.winner;
+    
 
-    // put this somewhere, not in the constructor
-    if(winnerTeamID = 0)
-    {
-      this.winTeam.teamTakeDowns = this.replayInfo.match.team0Takedowns;
-    }
-    else
-    {
 
-    }
 
 
 
     this.gameData = new GameData();
+
+    
 
 
     this.patchBuild = this.replayInfo.match.version;
@@ -242,8 +250,27 @@ class StormData{
 
   ProcessReplayData()
   {
-    this.replayInfo.match
+    this.winnerTeamID = this.replayInfo.match.winner;
 
+    //this.replayInfo.match
+        // put this somewhere, not in the constructor
+    if(this.winnerTeamID == 0)
+    {
+      this.winTeam.setTeamTakeDeaths(this.replayInfo.match.team0Takedowns);
+      this.winTeam.setTeamTakeDowns(this.replayInfo.match.team1Takedowns);
+      this.loseTeam.setTeamTakeDeaths(this.replayInfo.match.team1Takedowns);
+      this.loseTeam.setTeamTakeDowns(this.replayInfo.match.team0Takedowns);
+    }
+    else
+    {
+      this.winTeam.setTeamTakeDeaths(this.replayInfo.match.team1Takedowns);
+      this.winTeam.setTeamTakeDowns(this.replayInfo.match.team0Takedowns);
+      this.loseTeam.setTeamTakeDeaths(this.replayInfo.match.team0Takedowns);
+      this.loseTeam.setTeamTakeDowns(this.replayInfo.match.team1Takedowns);
+    }
+
+    // read all other info regarding game -> isnt this ProcessReplayData();
+    this.gameData.setGameData(this.replayInfo); 
   }
 
   /* After this function runs, we will have all the data we need in our structure. We won´t need HotsParser anymore */
@@ -278,7 +305,7 @@ class StormData{
 
       }
 
-      return players;
+      return 1;
   }
 }
 
