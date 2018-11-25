@@ -9,6 +9,16 @@ const constants = require(".\\..\\hots-parser\\constants.js");
 const parser = require("./../hots-parser/parser.js");
 
 
+/*  CONST TO NOT BE TOUCHED  */
+const TALENT_MIN_TIER = 1;
+const TALENT_MAX_TIER = 7;
+
+
+/*  FUNCTION RETURN MSGS  - MOVE THESE TO ANOTHER DOC*/
+const DS_RETURN_OK = 1;
+const DS_RETURN_UNKNONW_ERROR = 101;
+const DS_RETURN_UNKNONW_NOT_FOUND = 102;
+
 
 Files_env.Hots_parser_updater = Hots_parser_updater;
 
@@ -36,6 +46,33 @@ function LoopsToSeconds(loops)
   return parser.loopsToSeconds(loops);
 }
 
+
+/* */
+class Talent {
+  constructor()
+  {
+    this.TalentTier = 0;
+    this.TalentName = undefined;
+    this.TierChoice = 0;
+    this.isActive = 0;
+
+  }
+
+  SetActiveTier(talentName, tierChoice, tier)
+  {
+    this.TalentTier = tier;
+    this.TalentName = talentName;
+    this.TierChoice = tierChoice;
+    this.isActive = 1;
+  }
+
+  isSelected()
+  {
+    return this.isActive;
+  }
+}
+
+
 /* Search and create  a build from the player data:
 A tier can only be selected if we are pass that talent tier
 */
@@ -43,29 +80,58 @@ class HeroBuild {
   constructor(statData)
     {
       
-      this.talentSequence = this.getTalentSequence(statData);
-      this.talentTier_1 = -1;
-      this.talentTier_2 = -1;
-      this.talentTier_3 = -1;
-      this.talentTier_4 = -1;
-      this.talentTier_5 = -1;
-      this.talentTier_6 = -1;
-      this.talentTier_7 = -1;
+      
+      this.talentTier_1 = new Talent();
+      this.talentTier_2 = new Talent();
+      this.talentTier_3 = new Talent();
+      this.talentTier_4 = new Talent();
+      this.talentTier_5 = new Talent();
+      this.talentTier_6 = new Talent();
+      this.talentTier_7 = new Talent();
       //this.talentTierUnlocked= -1; // checkfunctionFromLVL() <- based on lvl will be messed by Chromie
-      this.teamLVL = -1;   // 
+     // this.teamLVL = statData.stats.;   // 
+      this.talentSequence = this.getTalentSequence(statData);
       // PASS TALENTS FROM TEXT TO NUMBERS
     };
   
+
+    /*  This function fill up the talents collecting the tier choice and name. It also creates the build sequence, easy comparable 
+    Missing try catch 
+    */
   getTalentSequence(statData)
   {
-    this.talentTier_1 = statData["Tier1Talent"];
-    this.talentTier_2 = statData["Tier2Talent"];
-    this.talentTier_3 = statData["Tier3Talent"];
-    this.talentTier_4 = statData["Tier4Talent"];
-    this.talentTier_5 = statData["Tier5Talent"];
-    this.talentTier_6 = statData["Tier6Talent"];
-    this.talentTier_7 = statData["Tier7Talent"];
-    return 1;
+    var tierSequence = "";
+
+    for(let i = TALENT_MIN_TIER; i <= TALENT_MAX_TIER; i++)
+    {
+
+      try{
+        let temp_tier_str = "Tier"+i+"Talent";
+        let stats_tier_ref = "talentTier_"+i;
+        let talent_tier_name = "Tier "+i+ " Choice";
+        let ref = this;
+        ref[stats_tier_ref].SetActiveTier(statData.talents[talent_tier_name], statData.gameStats[temp_tier_str], i)
+        // this[stats_tier_ref].TalentTier = statData.gameStats[temp_tier_str];
+        // this[stats_tier_ref].TalentName = statData.talents[talent_tier_name];
+        tierSequence = tierSequence.concat(ref[stats_tier_ref].TierChoice)
+
+      }
+
+      catch (err)
+      {
+        console.error("Error during talent parsing: "+err);
+        return -1;
+      }
+      
+    }
+    // this.stats.talentTier_1 = statData["Tier1Talent"];
+    // this.stats.talentTier_2 = statData["Tier2Talent"];
+    // this.stats.talentTier_3 = statData["Tier3Talent"];
+    // this.stats.talentTier_4 = statData["Tier4Talent"];
+    // this.stats.talentTier_5 = statData["Tier5Talent"];
+    // this.stats.talentTier_6 = statData["Tier6Talent"];
+    // this.stats.talentTier_7 = statData["Tier7Talent"];
+    return tierSequence;
   }
 
 }
@@ -98,7 +164,7 @@ class playerData
       this.win = playerdata["win"];
       this.stats =playerdata["gameStats"];
 
-      this.build = new HeroBuild(this.stats);
+      this.build = new HeroBuild(playerdata);
       
     };
 
@@ -333,13 +399,33 @@ class headerObject
 
 }
 
-//module.exports = Files_env;
-exports.Files_env = Files_env;
-exports.Standard_Map_List = Standard_Map_List;
-exports.Hero_List = attrs.heroAttribute;
-exports.StormData = StormData;
-exports.playerData = playerData;
-/* Split this into my own labels */
-//exports.game_data = constants.UnitType
-exports.game_data = constants;
+
+/*  CONST TO NOT BE TOUCHED  */
+module.exports={
+  TALENT_MIN_TIER : 1,
+  TALENT_MAX_TIER : 7,
+  
+  
+  /*  FUNCTION RETURN MSGS  - MOVE THESE TO ANOTHER DOC*/
+  DS_RETURN_OK : DS_RETURN_OK,
+  DS_RETURN_UNKNONW_ERROR : DS_RETURN_UNKNONW_ERROR,
+  DS_RETURN_UNKNONW_NOT_FOUND : DS_RETURN_UNKNONW_NOT_FOUND,
+
+  Files_env : Files_env,
+  Standard_Map_List : Standard_Map_List,
+  Hero_List : attrs.heroAttribute,
+  StormData : StormData,
+  playerData : playerData,
+  game_data : constants
+  }
+
+
+// exports.Files_env = Files_env;
+// exports.Standard_Map_List = Standard_Map_List;
+// exports.Hero_List = attrs.heroAttribute;
+// exports.StormData = StormData;
+// exports.playerData = playerData;
+// /* Split this into my own labels */
+// //exports.game_data = constants.UnitType
+// exports.game_data = constants;
 

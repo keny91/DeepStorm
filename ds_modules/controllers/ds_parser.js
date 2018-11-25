@@ -4,6 +4,18 @@ const parser = require("./../../hots-parser/parser.js");
 const vars = require("./../../environment/ds_vars.js");
 
 
+function IsValidMap(map)
+{
+
+    for (var m in vars.Standard_Map_List){
+        if(vars.Standard_Map_List[m] == map)
+            return vars.DS_RETURN_OK;
+    }
+        
+    return vars.DS_RETURN_UNKNONW_NOT_FOUND;
+
+}
+
 /*  Check if the replay contains the map  */
 function ReplayContainsMap(replay_info  , theReplayMap)
 {
@@ -173,5 +185,6 @@ class ReplayHeader
 
 
 exports.ReplayContainsMap = ReplayContainsMap;
+exports.IsValidMap = IsValidMap;
 exports.ReplayContainsCharacter = ReplayContainsCharacter;
 

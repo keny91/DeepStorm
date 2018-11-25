@@ -4,6 +4,7 @@ const fs = require('fs');
 const ls = require('os');
 const init = require("./ds_modules/controllers/ds_init");
 const dsParser = require("./ds_modules/controllers/ds_parser");
+const dsWinRT = require("./ds_modules/controllers/ds_WinRT");
 const vars = require("./environment/ds_vars.js");
 var csv = require("fast-csv");
 const fetch = require('node-fetch');
@@ -101,6 +102,17 @@ if (replay_path)
     let check;
     var replayInfo = new vars.StormData(replay_path);
     
+    var filter = new dsWinRT.MatchFilter();
+    //var filter_e = new filter();
+    filter.map = vars.Standard_Map_List.CursedHollow;
+    console.log(filter._map);
+    console.log(filter.map);
+
+   // console.log(filter2.map);
+    var filter2 = new dsWinRT.MatchFilter();
+    filter2.map = vars.Standard_Map_List.BattlefieldOfEternity;
+    console.log(filter2.map);
+
     check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     
     if(check)
