@@ -4,14 +4,13 @@ const ds_parser = require("./ds_parser");
 
 class MatchFilter
 {
-    #map;
     constructor()
     {
-        this._map;
-        // this.charactersWin;
-        // this.charactersLose;
-        // this.winTeamModel;
-        // this.loseTeamModel;
+        var _map;
+        this.charactersWin = [];
+        this.charactersLose = [];
+        this.winTeamModel;
+        this.loseTeamModel;
         // this.maxMatchDuration;
         // this.minMatchDuration;
         // this.minPatch;

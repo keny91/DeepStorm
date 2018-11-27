@@ -112,6 +112,9 @@ if (replay_path)
     var filter2 = new dsWinRT.MatchFilter();
     filter2.map = vars.Standard_Map_List.BattlefieldOfEternity;
     console.log(filter2.map);
+    filter2._map = "AAAA";
+    console.log(filter2.map);
+    console.log(filter2._map);
 
     check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     
