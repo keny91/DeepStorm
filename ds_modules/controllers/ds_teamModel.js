@@ -75,6 +75,19 @@ class RoleStandard
 }
 
 
+/**  Based on end-game stats, determine if the role that the player played during the match -> disregard any stats apart from 
+ * Max_X_team, Max_X_all, mean_X_pmin, ... 
+ * No direct comparisons player vs player */
+function DetermineRole_RAW ()
+{
+
+
+}
+
+/**
+ * 
+ * @param {*} mapSaveAFile  - Load previously calculated standards for the map.
+ */
 function LoadMapStandards (mapSaveAFile)
 {
 
