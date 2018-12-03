@@ -104,17 +104,13 @@ if (replay_path)
     
     var filter = new dsWinRT.MatchFilter();
     //var filter_e = new filter();
-    filter.map = vars.Standard_Map_List.CursedHollow;
-    console.log(filter._map);
-    console.log(filter.map);
+    //filter.addHeroWin = vars.Standard_Map_List.CursedHollow;
+    filter.addHero( vars.Hero_List.Butc, vars.DS_WIN,);
+    filter.setMatchDurationRange_loops(300,30000);
+    console.log(filter.winHeroes);
+    console.log(filter.Heroes);
 
    // console.log(filter2.map);
-    var filter2 = new dsWinRT.MatchFilter();
-    filter2.map = vars.Standard_Map_List.BattlefieldOfEternity;
-    console.log(filter2.map);
-    filter2._map = "AAAA";
-    console.log(filter2.map);
-    console.log(filter2._map);
 
     check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     

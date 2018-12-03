@@ -20,8 +20,22 @@ const DS_RETURN_UNKNONW_ERROR = 101;
 const DS_RETURN_UNKNONW_NOT_FOUND = 102;
 
 
+/* MMR  - currently Hotslogs based*/
+const LeagueMMR
+{
+  BronceLeague:500;
+  SilverLeague:1000;
+  GoldLeague:1500;
+  PlatinumLeague:2000;
+  DiamondLeages:2500;
+  MasterLeague:4000;
+}
+
+
+
 Files_env.Hots_parser_updater = Hots_parser_updater;
 
+const BUILD_ANY =  999; // unlikely/impossible build
 
 const WIN = 1;
 const LOSS = 0;
@@ -411,6 +425,13 @@ module.exports={
   DS_RETURN_UNKNONW_ERROR : DS_RETURN_UNKNONW_ERROR,
   DS_RETURN_UNKNONW_NOT_FOUND : DS_RETURN_UNKNONW_NOT_FOUND,
 
+  DS_WIN : WIN,
+  DS_LOSS : LOSS,
+  DS_BUILD_ANY : BUILD_ANY,
+
+  LoopsToSeconds : LoopsToSeconds,
+
+  LeagueMMR : LeagueMMR,
   Files_env : Files_env,
   Standard_Map_List : Standard_Map_List,
   Hero_List : attrs.heroAttribute,

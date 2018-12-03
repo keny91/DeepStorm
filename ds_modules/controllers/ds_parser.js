@@ -16,6 +16,19 @@ function IsValidMap(map)
 
 }
 
+function IsValidHero(hero)
+{
+
+    for (var m in vars.Hero_List){
+        if(vars.Hero_List[m] == hero)
+            return vars.DS_RETURN_OK;
+    }
+        
+    return vars.DS_RETURN_UNKNONW_NOT_FOUND;
+
+}
+
+
 /*  Check if the replay contains the map  */
 function ReplayContainsMap(replay_info  , theReplayMap)
 {
@@ -82,7 +95,6 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
                         found =   false;
                     }  
                 }
-
                 /* If does not matter if win or loss */
                 else
                 {
@@ -100,9 +112,6 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
 
     return found;
 }
-
-
-
 
 
 
@@ -130,11 +139,22 @@ class Replay
     /*  From a file create the header (quick reference information) and the body (extracted and processed info) */
     constructor(file)
     {
-        this.header = new ReplayHeader(file);
-        this.body = new ReplayBody(file);
+        if (file != null || file != undefined)
+        {
+            this.header = new ReplayHeader(file);
+            this.body = new ReplayBody(file);
+        }
+        else 
+        {
+            this.header;
+            this.body ;
+        }
     }
 
+    getHostApiReplay(filter)
+    {
 
+    }
 }
 
 
@@ -186,5 +206,6 @@ class ReplayHeader
 
 exports.ReplayContainsMap = ReplayContainsMap;
 exports.IsValidMap = IsValidMap;
+exports.IsValidHero = IsValidHero;
 exports.ReplayContainsCharacter = ReplayContainsCharacter;
 
