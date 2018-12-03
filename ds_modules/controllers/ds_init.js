@@ -1,5 +1,11 @@
+/**
+ *  This document contains scripts that run multiple processes,
+ * sometimes syncronous, sometimes in parallel.
+ * 
+ */
 
-//const Files_env = require("")
+
+
 const fs = require('fs');
 const path = require('path');
 const colors = require('colors');

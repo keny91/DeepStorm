@@ -1,5 +1,9 @@
+/**
+ * Document contains processes and structures to manipulate, read, write and 
+ * interprete winrates.
+ */
+
 const vars = require("./../../environment/ds_vars.js");
-//const parser = require("./../../hots-parser/parser.js");
 const ds_parser = require("./ds_parser");
 
 class MatchFilter

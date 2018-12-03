@@ -1,4 +1,7 @@
-
+/**
+ * This document contains scripts to turn instances from 'hots-parser'
+ * to our objects and structs.
+ */
 
 const parser = require("./../../hots-parser/parser.js");
 const vars = require("./../../environment/ds_vars.js");

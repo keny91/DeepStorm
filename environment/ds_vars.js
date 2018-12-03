@@ -1,3 +1,7 @@
+/**
+ * Document containing generic data for DS common processes.
+ * This includes game data.
+ */
 
 /* Files environtments, depending on what files are required, use different exports */
 const Files_env = {};
@@ -61,7 +65,10 @@ function LoopsToSeconds(loops)
 }
 
 
-/* */
+/**
+ * Talents have a reference to the tier, name and numerated choice.
+ * ...Maybe we will add more data to these...
+ */
 class Talent {
   constructor()
   {
@@ -72,6 +79,12 @@ class Talent {
 
   }
 
+  /** Set the talent in a tier 
+   * 
+   * @param {*} talentName Name of the talent, like ingame.
+   * @param {*} tierChoice Numerated choice in the tier.
+   * @param {*} tier Tier that the talent  belongs to.
+   */
   SetActiveTier(talentName, tierChoice, tier)
   {
     this.TalentTier = tier;
@@ -80,16 +93,19 @@ class Talent {
     this.isActive = 1;
   }
 
-  isSelected()
+  /**
+   * return if the talent has been picked.
+   */
+  Active()
   {
     return this.isActive;
   }
 }
 
 
-/* Search and create  a build from the player data:
-A tier can only be selected if we are pass that talent tier
-*/
+/** Search and create  a build from the player data:
+ *  A tier can only be selected if we are pass that talent tier
+ */
 class HeroBuild {
   constructor(statData)
     {
@@ -102,16 +118,16 @@ class HeroBuild {
       this.talentTier_5 = new Talent();
       this.talentTier_6 = new Talent();
       this.talentTier_7 = new Talent();
-      //this.talentTierUnlocked= -1; // checkfunctionFromLVL() <- based on lvl will be messed by Chromie
-     // this.teamLVL = statData.stats.;   // 
       this.talentSequence = this.getTalentSequence(statData);
       // PASS TALENTS FROM TEXT TO NUMBERS
     };
   
 
-    /*  This function fill up the talents collecting the tier choice and name. It also creates the build sequence, easy comparable 
-    Missing try catch 
-    */
+
+  /** This function fill up the talents collecting the tier choice and name. It also creates the build sequence, easy comparable 
+   * 
+   * @param {*} statData Player data struct
+   */
   getTalentSequence(statData)
   {
     var tierSequence = "";
@@ -138,19 +154,15 @@ class HeroBuild {
       }
       
     }
-    // this.stats.talentTier_1 = statData["Tier1Talent"];
-    // this.stats.talentTier_2 = statData["Tier2Talent"];
-    // this.stats.talentTier_3 = statData["Tier3Talent"];
-    // this.stats.talentTier_4 = statData["Tier4Talent"];
-    // this.stats.talentTier_5 = statData["Tier5Talent"];
-    // this.stats.talentTier_6 = statData["Tier6Talent"];
-    // this.stats.talentTier_7 = statData["Tier7Talent"];
+
     return tierSequence;
   }
 
 }
 
-
+/**
+ * Unimplemented ...
+ */
 class XP_Breakdown
 {
   constructor(replay_info)
@@ -163,7 +175,10 @@ class XP_Breakdown
 
 
 
-/* Create a playerData from the dataObject given the Id */
+
+/**
+ * playerData from the dataObject given the Id
+ */
 class playerData
 {
   constructor(replay_info, playerId )
@@ -186,14 +201,18 @@ class playerData
 
 
 
-/*  Given a player_id from this match, try to load and process information into the structure   */
+/**     */
+/** Given a player_id from this match, try to load and process information into the structure
+ * 
+ * @param {*} replay_info Strormdata instance
+ * @param {*} player_index_ingame player unique identifier
+ */
 function ReadPlayerData (replay_info, player_index_ingame)
 {
     if (replay_info instanceof StormData) 
     {
-    /// Unfinished
-
-        return new playerData(replay_info, player_index_ingame);
+      /// Unfinished
+      return new playerData(replay_info, player_index_ingame);
 
     }
     return {NULL};
@@ -201,7 +220,9 @@ function ReadPlayerData (replay_info, player_index_ingame)
 
 
 
-
+/**
+ * Create a gameData instance from the parsed (hots-parser) data from a replay.
+ */
 class GameData 
 {
   constructor(replaydata)
@@ -217,6 +238,10 @@ class GameData
     this.winnerTeamID;
   }
 
+  /** Set the data based on a 'hots-parser' replay data
+   * 
+   * @param {*} replaydata the 'hots-parser' replay data.
+   */
   setGameData (replaydata)
   {
     this.firstFortbyWinningTeam = replaydata.match.firstFortWin;
@@ -231,7 +256,9 @@ class GameData
   }
 }
 
-
+/**
+ * Team class contains information regarding all (5) players and combined stats.
+ */
 class Team 
 {
   constructor(isWinner)
@@ -261,21 +288,23 @@ class Team
   }
 
 
-  /* Internal function to add a playerData to a specific team */
+  /** Internal function to add a playerData to a specific team
+   * 
+   * @param {*} player playerData object instance, it will be allocated in the winning 
+   * or losing team accordingly. 
+   */
   Addplayer(player)
   {
     if (player instanceof playerData) 
     {
       // verify that we are putting a win/lose player in the right team
-      if(player.win ==! this.win) 
+      if(player.win != this.win) 
         return null;
       
       
       this.Players.push(player); // push not valid for objects
 
       this.nof_players_processed ++;
-      
-
     }
     else
     {
@@ -283,6 +312,10 @@ class Team
     }
   }
 
+  /** Set the amount of enemy takedowns a team achieved.
+   * 
+   * @param {*} value Number of takedons 
+   */
   setTeamTakeDowns (value)
   {
     if (value < 0)
@@ -293,11 +326,15 @@ class Team
 
   }
 
+  /** Set the amount of player deaths as team.
+   * 
+   * @param {*} value Number of deaths 
+   */
   setTeamTakeDeaths (value)
   {
     if (value < 0)
     console.error("Invalid value input for teamTakeDeaths: "+value);
-    /* ERRROR HERE */
+    /* ERRRR HERE */
     else 
       this.teamDeaths = value;
 
@@ -307,8 +344,10 @@ class Team
 
 
 
-/* Object containing the  replaydata, along with our processed information  */
-/* Teams, players,  */
+
+/**
+ * Object containing the  replaydata, along with our processed information: Teams, players,
+ */
 class StormData{
     
   constructor(file)
@@ -340,6 +379,9 @@ class StormData{
   };
 
 
+  /**
+   *  Process that should happen during the constructor
+   */
   ProcessReplayData()
   {
     this.winnerTeamID = this.replayInfo.match.winner;
@@ -402,7 +444,9 @@ class StormData{
 }
 
 
-
+/**
+ * Currently not used/implemented
+ */
 class headerObject
 {
     constructor(file)
@@ -441,12 +485,4 @@ module.exports={
   }
 
 
-// exports.Files_env = Files_env;
-// exports.Standard_Map_List = Standard_Map_List;
-// exports.Hero_List = attrs.heroAttribute;
-// exports.StormData = StormData;
-// exports.playerData = playerData;
-// /* Split this into my own labels */
-// //exports.game_data = constants.UnitType
-// exports.game_data = constants;
 

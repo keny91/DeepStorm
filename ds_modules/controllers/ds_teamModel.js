@@ -1,4 +1,6 @@
-
+/** 
+ * Document contains instances and processes to read/write and interpret team models.
+ */
 
 // Reference to load role standard by map
 
