@@ -10,6 +10,11 @@ const DS_RETURN_UNKNONW_ERROR = 101;
 const DS_RETURN_UNKNONW_NOT_FOUND = 102;
 
 
+
+/* 
+Should each hero have a power distribution - 30point waveclear - 20p peeler - 30 selfsustain - ...
+or best role for hero model...
+*/
 var Roles = [
 {
     id:1,
@@ -79,7 +84,8 @@ class RoleStandard
 
 /**  Based on end-game stats, determine if the role that the player played during the match -> disregard any stats apart from 
  * Max_X_team, Max_X_all, mean_X_pmin, ... 
- * No direct comparisons player vs player */
+ * No direct comparisons player vs player 
+ */
 function DetermineRole_RAW ()
 {
 
@@ -92,7 +98,7 @@ function DetermineRole_RAW ()
  */
 function LoadMapStandards (mapSaveAFile)
 {
-
+    // TO BE DONE
     return DS_RETURN_OK;
 }
 

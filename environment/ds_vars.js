@@ -25,14 +25,13 @@ const DS_RETURN_UNKNONW_NOT_FOUND = 102;
 
 
 /* MMR  - currently Hotslogs based*/
-const LeagueMMR
-{
-  BronceLeague:500;
-  SilverLeague:1000;
-  GoldLeague:1500;
-  PlatinumLeague:2000;
-  DiamondLeages:2500;
-  MasterLeague:4000;
+const LeagueMMR = {
+  BronceLeague : 500,
+  SilverLeague : 1000,
+  GoldLeague : 1500,
+  PlatinumLeague : 2000,
+  DiamondLeages : 2500,
+  MasterLeague : 4000
 }
 
 

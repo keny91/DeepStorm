@@ -104,7 +104,7 @@ if (replay_path)
     
     var filter = new dsWinRT.MatchFilter();
     //var filter_e = new filter();
-    //filter.addHeroWin = vars.Standard_Map_List.CursedHollow;
+    filter.map = vars.Standard_Map_List.CursedHollow;
     filter.addHero( vars.Hero_List.Butc, vars.DS_WIN,);
     filter.setMatchDurationRange_loops(300,30000);
     console.log(filter.winHeroes);
@@ -112,12 +112,9 @@ if (replay_path)
 
    // console.log(filter2.map);
 
-    check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
+    //check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     
-    if(check)
-    {
-        console.log("Map detected!");
-    }
+    dsWinRT.StormDataFulfillsFilter(replayInfo,filter);
 
     check = dsParser.ReplayContainsCharacter(replayInfo, vars.Hero_List.LiLi, true);
     

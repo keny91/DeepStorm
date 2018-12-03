@@ -4,7 +4,7 @@
  */
 
 const vars = require("./../../environment/ds_vars.js");
-const ds_parser = require("./ds_parser");
+const dsParser = require("./ds_parser");
 
 class MatchFilter
 {
@@ -37,7 +37,7 @@ class MatchFilter
     set map(value)
     {
         // check if is a valid map input
-        if(ds_parser.IsValidMap(value) == vars.DS_RETURN_OK)
+        if(dsparser.IsValidMap(value) == vars.DS_RETURN_OK)
         {
             this._map = value;
         }
@@ -150,4 +150,24 @@ class MatchFilter
 }
 
 
+function StormDataFulfillsFilter(stormdata, filter)
+{
+    if (!(stormdata instanceof vars.StormData) || !(filter instanceof MatchFilter))
+    {
+        console.error("Invalid data objects as inputs of \"StormDataFulfillsFilter\"");
+        return DS_RETURN_UNKNONW_ERROR;
+    }
+
+    let check_success = 0;
+
+    check_success = dsParser.ReplayContainsMap(replayInfo, filter.map);
+
+    if(check_success)
+        console.log("Map found")
+
+
+}
+
+
 exports.MatchFilter = MatchFilter;
+exports.StormDataFulfillsFilter = StormDataFulfillsFilter;
