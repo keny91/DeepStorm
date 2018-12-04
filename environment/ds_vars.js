@@ -10,7 +10,7 @@ var Game_env ={};
 var Hots_parser_updater = ".\\git-update_hostparser.bat";
 const attrs = require(".\\..\\hots-parser\\attr.js");
 const constants = require(".\\..\\hots-parser\\constants.js");
-const parser = require("./../hots-parser/parser.js");
+const ds_Parser = require("./../ds_modules/controllers/ds_parser");
 
 
 /*  CONST TO NOT BE TOUCHED  */
@@ -38,7 +38,7 @@ const LeagueMMR = {
 
 Files_env.Hots_parser_updater = Hots_parser_updater;
 
-const BUILD_ANY =  999; // unlikely/impossible build
+const ANY =  999; // unlikely/impossible build
 
 const WIN = 1;
 const LOSS = 0;
@@ -58,10 +58,8 @@ function wait(ms){
 }
 
 
-function LoopsToSeconds(loops)
-{
-  return parser.loopsToSeconds(loops);
-}
+
+
 
 
 /**
@@ -353,21 +351,13 @@ class StormData{
   {
     var options ={};
     /* Read info directly using the hots-parser API */
-    this.replayInfo = parser.processReplay(file, options);
+    this.replayInfo = ds_Parser.processReplay(file, options);
 
     // empty for now, fill teams
     this.winTeam = new Team(true); // win team
     this.loseTeam = new Team(false); // win team
-    
-
-
-
-
 
     this.gameData = new GameData();
-
-    
-
 
     this.patchBuild = this.replayInfo.match.version;
 
@@ -440,21 +430,28 @@ class StormData{
 
       return 1;
   }
+
+  getMatchLenght()
+  {
+    return this.gameData.matchLenghtLoops;
+  }
+
+
 }
 
 
 /**
  * Currently not used/implemented
  */
-class headerObject
-{
-    constructor(file)
-    {
-      var options ={};
-      this.replayHeader = parser.getHeader(file);
-    };
+// class headerObject
+// {
+//     constructor(file)
+//     {
+//       var options ={};
+//       this.replayHeader = parser.getHeader(file);
+//     };
 
-}
+// }
 
 
 /*  CONST TO NOT BE TOUCHED  */
@@ -470,9 +467,8 @@ module.exports={
 
   DS_WIN : WIN,
   DS_LOSS : LOSS,
-  DS_BUILD_ANY : BUILD_ANY,
-
-  LoopsToSeconds : LoopsToSeconds,
+  DS_ANY : ANY,
+  DS_BUILD_ANY : ANY,
 
   LeagueMMR : LeagueMMR,
   Files_env : Files_env,

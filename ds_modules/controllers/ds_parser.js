@@ -7,6 +7,39 @@ const parser = require("./../../hots-parser/parser.js");
 const vars = require("./../../environment/ds_vars.js");
 
 
+
+
+
+function LoopsToSeconds(loops)
+{
+  return parser.loopsToSeconds(loops);
+}
+
+function LoopsToMinutes(loops)
+{
+  let secs = parser.loopsToSeconds(loops);
+  return Math.round((secs/60)* 100) / 100;
+}
+
+function SecondsToLoops(seconds)
+{
+  return seconds*16;
+}
+
+function MinutesToLoops(minutes)
+{
+  let secs = minutes*60;
+  return SecondsToLoops(secs);
+}
+
+
+
+
+
+/** 
+ * Is the map among the ones in the standard map list? 
+ * @param {*} map the map id to be questioned,
+ */
 function IsValidMap(map)
 {
 
@@ -19,6 +52,10 @@ function IsValidMap(map)
 
 }
 
+/**
+ * Is the hero among the hero pool?
+ * @param {*} hero the hero id in question.
+ */
 function IsValidHero(hero)
 {
 
@@ -31,17 +68,29 @@ function IsValidHero(hero)
 
 }
 
+/**    Find out if the value is determined as a default.
+ * 
+ * @param {*} value the value to be examined
+ */
+function AnyValueParameter(value)
+{
+    if(value = vars.DS_ANY || value == null || value == undefined)
+        return true;
+    else 
+        return false;
+}
+
 
 /*  Check if the replay contains the map  */
-function ReplayContainsMap(replay_info  , theReplayMap)
+function ReplayContainsMap(stormdata  , theReplayMap)
 {
-    if (replay_info instanceof vars.StormData) 
+    if (stormdata instanceof vars.StormData) 
     {
         //console.log("Class object type detected!");
 
         // store in variables to bbetter study js behabiour
         let Map2 = theReplayMap.valueOf();
-        let Map1 = replay_info.replayInfo.match.map;
+        let Map1 = stormdata.replayInfo.match.map;
 
         // is it the map we are searching for?
         if (Map2 == Map1)
@@ -49,34 +98,85 @@ function ReplayContainsMap(replay_info  , theReplayMap)
     }
     else
     {
-        console.debug("Object 'replay_info' is not an instance of StormData");
+        console.debug("Object 'stormdata' is not an instance of StormData");
     }
     return false;
 }
 
 
+/** Find if a match duration is inside the specified range in loops.
+ * 
+ * @param {*} stormdata  StormData object instance.
+ * @param {*} min_duration  minimum match duration.
+ * @param {*} max_duration  max match duration.
+ * @field  leave either of the ranges 'null', 'undefined' or 'DS_ANY' to not set a value for that threshold. 
+ */
+function ReplayMatchDurationIsInRange(stormdata, min_duration,max_duration)
+{
+    let valid = true;
+    let check_min = false;
+    let check_max = false;
+
+    if (stormdata instanceof vars.StormData) 
+    {
+        let durationInLoops = stormdata.getMatchLenght();
+        check_min = AnyValueParameter(min_duration);
+        check_max = AnyValueParameter(max_duration);
+
+        if(check_min && min_duration > durationInLoops)
+        {
+            return false;
+        }
+
+        if(check_max && max_duration < durationInLoops)
+        {
+            return false;
+        }
+
+    }
+    else
+    {
+        console.debug("Object 'stormdata' is not an instance of StormData");
+    }
+    return valid;
+}
 
 
 
 
 /* Character: Name[string] - Build:1213211[string or array?] - BuildWeight(mapDependent) [aray?]*/
-/*  Check if character participated in match   (and if is in winning team)  */
-function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
+
+/** Check if character participated in match and under certain rules.
+ * 
+ * @param {*} stormdata StormData object that should be initialized already,
+ * @param {*} theHero HeroId to be found in the match.  
+ * @param {*} isInWinningTeam Is the hero in the winning/lossing/any side? - DS_WIN, DS_LOSS, DS_ANY
+ * @param {*} build Are we searching for a particular build? - optional
+ */
+function ReplayContainsCharacter(stormdata , theHero, isInWinningTeam, build)
 {
-    let found =-1;
-    let compare_build = -1;
+    let found =  false;
+    let valid = false;
+    let compare_build = false;
 
-    if (build != null)
-        compare_build=1;
+    // are we trying to find a build?
+    if (build != null && build !=undefined && build != vars.DS_BUILD_ANY )
+        compare_build=true;
 
-    // Add compare build check -> need to generate build
 
-    if (replay_info instanceof vars.StormData) 
+    /** Add compare build check -> need to generate build
+     * 
+     * 
+     * 
+     * 
+     */
+
+
+    if (stormdata instanceof vars.StormData) 
     {
 
-        let players = replay_info.replayInfo.players;
-        let player_ids = replay_info.replayInfo.match.playerIDs;
-        
+        let players = stormdata.replayInfo.players;
+        let player_ids = stormdata.replayInfo.match.playerIDs;
 
         // check all players by players_ids
         for (let player in player_ids)
@@ -86,34 +186,43 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
             let player_data = players[player_id];
             if(theHero.valueOf() == player_data["hero"])
             {
-                /* Extra check if we are looking for a match where the hero WINS */
-                if(isInWinningTeam)
+                switch(isInWinningTeam)
                 {
-                    if(player_data["win"] == true)
-                    {
-                        found =  true;    
-                    } 
-                    else 
-                    {
-                        found =   false;
-                    }  
+                    case vars.DS_WIN:
+                        found =  true;
+                        if(player_data["win"] == true)
+                        {
+                            valid = true;    
+                        } 
+                        
+                    break;
+
+                    case vars.DS_LOSS:
+                        found =  true;
+                        if(player_data["win"] == false)
+                        {
+                            valid = true;   
+                        } 
+                    break;
+
+                    case vars.DS_ANY:
+                        found = true;
+                        valid =  true;
+                    break;
                 }
-                /* If does not matter if win or loss */
-                else
-                {
-                    found =  true;
-                }
-                // character was found, lets break here
-                break;  
+
             }
+
+            // if we found the hero
+            if(found)
+                break;
         }
     }
     else
     {
-        console.debug("Object 'replay_info' is not an instance of StormData");
+        console.debug("Object 'stormdata' is not an instance of StormData");
     }
-
-    return found;
+    return valid;
 }
 
 
@@ -134,31 +243,6 @@ function ReplayContainsCharacter(replay_info , theHero, isInWinningTeam, build)
 // "max_acc_disconection_time":"0",    # max_accumulated disconection time for the player 
 // "duration":"duration",
 
-
-
-class Replay
-{
-
-    /*  From a file create the header (quick reference information) and the body (extracted and processed info) */
-    constructor(file)
-    {
-        if (file != null || file != undefined)
-        {
-            this.header = new ReplayHeader(file);
-            this.body = new ReplayBody(file);
-        }
-        else 
-        {
-            this.header;
-            this.body ;
-        }
-    }
-
-    getHostApiReplay(filter)
-    {
-
-    }
-}
 
 
 
@@ -207,8 +291,13 @@ class ReplayHeader
 }
 
 
+exports.LoopsToSeconds = LoopsToSeconds;
+exports.LoopsToMinutes = LoopsToMinutes;
+exports.MinutesToLoops = MinutesToLoops;
+exports.SecondsToLoops = SecondsToLoops;
 exports.ReplayContainsMap = ReplayContainsMap;
 exports.IsValidMap = IsValidMap;
 exports.IsValidHero = IsValidHero;
 exports.ReplayContainsCharacter = ReplayContainsCharacter;
-
+exports.ReplayMatchDurationIsInRange = ReplayMatchDurationIsInRange;
+exports.processReplay = parser.processReplay;

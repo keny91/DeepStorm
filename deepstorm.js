@@ -3,8 +3,8 @@
 const fs = require('fs');
 const ls = require('os');
 const init = require("./ds_modules/controllers/ds_init");
-const dsParser = require("./ds_modules/controllers/ds_parser");
-const dsWinRT = require("./ds_modules/controllers/ds_WinRT");
+const ds_Parser = require("./ds_modules/controllers/ds_parser");  // can take out of here
+const dsWinRT = require("./ds_modules/controllers/ds_WinRT");   
 const vars = require("./environment/ds_vars.js");
 var csv = require("fast-csv");
 const fetch = require('node-fetch');
@@ -90,11 +90,20 @@ init.DisplayBuildVersion();
 var a = await MakeHotsapiRequest();
 console.log(a);
 // linear -> wait till done
-//initProcess ();
 
 
-/* parse a replay*/
-//var replayInfo = parser_exp.processReplay(replay_path, options ={});
+/** TEST PROCESS:
+ *      1) Create Filter
+ *      2) Get Replay queries to HOTSAPI -> maybe we can get complex params like certain characters or builds
+ *      3) Verify that replay contains filter´s rules -> APPROVE OR REJECT
+ *      4) APPROVED replays will be re-parsed and the data will be locally stored for our analyzing purpuses
+ *          ===> BUILD A DATA TREE FILE SYSTEM
+ * 
+ */
+
+
+
+
 
 //
 if (replay_path)
@@ -102,32 +111,36 @@ if (replay_path)
     let check;
     var replayInfo = new vars.StormData(replay_path);
     
+    console.log(replayInfo.gameData.matchLenghtLoops);
+    console.log(ds_Parser.LoopsToSeconds(replayInfo.gameData.matchLenghtLoops));
+    console.log(ds_Parser.LoopsToMinutes(replayInfo.gameData.matchLenghtLoops));
+
     var filter = new dsWinRT.MatchFilter();
     //var filter_e = new filter();
     filter.map = vars.Standard_Map_List.CursedHollow;
-    filter.addHero( vars.Hero_List.Butc, vars.DS_WIN,);
-    filter.setMatchDurationRange_loops(300,30000);
-    console.log(filter.winHeroes);
-    console.log(filter.Heroes);
+    filter.addHero( vars.Hero_List.Butc, vars.DS_LOSS,);
+    //filter.setMatchDurationRange_loops(300,30000);
 
-   // console.log(filter2.map);
+    filter.setMatchDurationRange_mins(10,21); // from 10 to 18 mins
+    // console.log(filter.winHeroes);
+    // console.log(filter.Heroes);
 
-    //check = dsParser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
+
+    //check = ds_Parser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     
     dsWinRT.StormDataFulfillsFilter(replayInfo,filter);
 
-    check = dsParser.ReplayContainsCharacter(replayInfo, vars.Hero_List.LiLi, true);
-    
-    if(check)
-    {
-        console.log("Character detected!");
-    }
+    // check = ds_Parser.ReplayContainsCharacter(replayInfo, vars.Hero_List.LiLi, true);
+    // if(check)
+    // {
+    //     console.log("Character detected!");
+    // }
 
 
 
 
 
-    // var a =  await dsParser.GetAllPlayersData(replayInfo);
+    // var a =  await ds_Parser.GetAllPlayersData(replayInfo);
 
    
 
