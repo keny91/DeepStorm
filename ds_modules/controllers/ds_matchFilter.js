@@ -17,19 +17,32 @@ class MatchFilter
     {
         this._map;
         this._Heroes = [];
+
+
         this._winHeroes = [];
         this._loseHeroes = [];
-
-        this._winTeamModel;
-        this._loseTeamModel;
-        this._maxMatchDuration_loops = vars.DS_BUILD_ANY;
-        this._minMatchDuration_loops = vars.DS_BUILD_ANY;
-
+        // Saved when storing a win/lose hero
         this._winHeroesBuilds =[];
         this._loseHeroesBuilds =[];
 
+        // team models
+        this._winTeamModel;
+        this._loseTeamModel;
+
+        // game duration
+        this._maxMatchDuration_loops = vars.DS_BUILD_ANY;
+        this._minMatchDuration_loops = vars.DS_BUILD_ANY;
+
+
+
+        
         this._winHeroesTeamModel = vars.DS_BUILD_ANY;
         this._loseHeroesTeamModel = vars.DS_BUILD_ANY;
+
+        this._maxPlayerMMR =  vars.DS_ANY;
+        this._minPlayerMMR =  vars.DS_ANY;
+        this._maxAvrPlayerMMR =  vars.DS_ANY;
+        this._minAvrPlayerMMR =  vars.DS_ANY;
 
         this._containsDisconections;
 
@@ -294,7 +307,7 @@ function StormDataFulfillsFilter(stormdata, filter)
         return false;
     }
 
-    // 5 - 
+    // 5 - LEAGUE/MMR RANGE
     //filter.
 
 

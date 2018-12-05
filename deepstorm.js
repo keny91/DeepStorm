@@ -4,8 +4,9 @@ const fs = require('fs');
 const ls = require('os');
 const init = require("./ds_modules/controllers/ds_init");
 const ds_Parser = require("./ds_modules/controllers/ds_parser");  // can take out of here
-const dsWinRT = require("./ds_modules/controllers/ds_matchFilter");   
+const ds_matchFilter = require("./ds_modules/controllers/ds_matchFilter");   
 const vars = require("./environment/ds_vars.js");
+const ds_dataTree = require("./ds_modules/controllers/ds_dataTree");
 var csv = require("fast-csv");
 const fetch = require('node-fetch');
 
@@ -26,6 +27,7 @@ function wait(ms){
       end = new Date().getTime();
    }
 }
+
 
 
 async function initProcess ()
@@ -80,6 +82,55 @@ async function MakeHotsapiRequest()
 } 
 
 
+
+
+/* TEST 1 */
+async function WriteJSON()
+{
+    let student = {  
+        name: 'Mike',
+        age: 23, 
+        gender: 'Male',
+        department: 'English',
+        car: 'Honda' 
+    };
+
+    const path = "./dsconfig.json";
+    let data = await JSON.stringify(student, null, 2);
+
+
+    const writedata = async path => {
+        try
+        {
+            const response = await fs.writeFile(path, data, (err) => {  
+                if (err) throw err;
+                console.log('Data written to file');
+                return 1;
+            });
+            return response;
+        }
+        catch (error) {
+            console.log(error);
+          }
+    };
+
+    j = writedata(path);
+    console.log('This is after the write call');  
+    return j;
+}
+
+/* TEST 2 */
+async function FindConfigFile()
+{
+    const path = "./dsconfig.json";
+    fs.readFile(path, (err, data) => {  
+        if (err) throw err;
+        let content = JSON.parse(data);
+        console.log(content);
+    });
+}
+
+
 async function main()
 {
 /*  Execute in order */
@@ -93,16 +144,27 @@ console.log(a);
 
 
 /** TEST PROCESS:
+ * 
+ *      CREATE INIT TO LOAD DIFFERENT TREES
+ * 
+ *      TREE_SOURCE_LOAD
+ *      1) TRY read storm_config.json
+ *           1-1 (SUCCESS) TRY load Tree_file.json (information of the tree)
+ *              1-1-1 (SUCCESS) Load the Tree_file.json as DataTree instance
+ *              1-1-2 (NOT-FOUND/ERROR) Report error
+ *           1-2 (NOT_FOUND) ASK to create tree at DEFAULT location or a path -> create at path
+ *              ->save config as json. 
+ * 
+ *      FILTERING REPLAYS
+ * 
  *      1) Create Filter
  *      2) Get Replay queries to HOTSAPI -> maybe we can get complex params like certain characters or builds
  *      3) Verify that replay contains filter´s rules -> APPROVE OR REJECT
  *      4) APPROVED replays will be re-parsed and the data will be locally stored for our analyzing purpuses
  *          ===> BUILD A DATA TREE FILE SYSTEM
+ *          ===> Save
  * 
  */
-
-
-
 
 
 //
@@ -111,11 +173,25 @@ if (replay_path)
     let check;
     var replayInfo = new vars.StormData(replay_path);
     
+   // const ans = await ds_dataTree.askQuestion("Are you sure you want to deploy to PRODUCTION? ");
+
+
+    //console.log("WE FOUND IT");
+    // else
+    // console.log("WE DID NOT FIND IT");
+
+    var n = await WriteJSON();
+
+    var e = await FindConfigFile();
+
+    var dataTree = await new ds_dataTree.DataTree("aaaa");
+
+
     console.log(replayInfo.gameData.matchLenghtLoops);
     console.log(ds_Parser.LoopsToSeconds(replayInfo.gameData.matchLenghtLoops));
     console.log(ds_Parser.LoopsToMinutes(replayInfo.gameData.matchLenghtLoops));
 
-    var filter = new dsWinRT.MatchFilter();
+    var filter = new ds_matchFilter.MatchFilter();
     //var filter_e = new filter();
     filter.map = vars.Standard_Map_List.CursedHollow;
     filter.addHero( vars.Hero_List.Butc, vars.DS_LOSS,);
@@ -128,7 +204,7 @@ if (replay_path)
 
     //check = ds_Parser.ReplayContainsMap(replayInfo, vars.Standard_Map_List.CursedHollow);
     
-    dsWinRT.StormDataFulfillsFilter(replayInfo,filter);
+    ds_matchFilter.StormDataFulfillsFilter(replayInfo,filter);
 
     // check = ds_Parser.ReplayContainsCharacter(replayInfo, vars.Hero_List.LiLi, true);
     // if(check)

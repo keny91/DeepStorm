@@ -15,6 +15,9 @@ const simpleGit = require('simple-git')();
 const async = require("async");
 
 
+
+const configFileName = "dsconfig.json";
+
 function DisplayBuildVersion()
 {
     if (pjson) 
@@ -116,7 +119,27 @@ function CheckHostReplayParser ()
 
 
 
+class dsConfigFile
+{
+    constructor()
+    {
+        // self
+        this.fileName;
+        this.filePath;
 
+        // DeepStorm release version
+        this.DS_version;
+
+        // dataTreeLocation
+        this.dataTreeDirectory;
+
+        // tree type -> maybe we will have different trees
+        this.dataTreeType;
+
+    }
+
+
+}
 
 
 
