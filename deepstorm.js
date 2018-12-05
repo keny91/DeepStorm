@@ -82,10 +82,46 @@ async function MakeHotsapiRequest()
 } 
 
 
+/** Read a json file
+ * 
+ * @param {string} file path to file
+ */
+function readJSONFile(file) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(file, 'utf-8', (err, data) => { 
+        if (err) reject(err);
+        resolve(JSON.parse(data));
+      });
+    });
+  }
 
+
+/** Read a json file
+ * 
+ * @param {string} file path to file
+ */
+function writeJSONFile() {
+    const path = "./dsconfig.json";
+    let student = {  
+        name: 'Mike',
+        age: 23, 
+        gender: 'Male',
+        department: 'English',
+        car: 'Honda' 
+    };
+
+    return new Promise((resolve, reject) => {
+        let data =  JSON.stringify(student, null, 2);
+            fs.writeFile(path, data, (err) => {  
+                if (err) reject(err);
+                resolve(1);
+                // console.log('Data written to file');
+        });
+    });
+  }
 
 /* TEST 1 */
-async function WriteJSON()
+function WriteJSON()
 {
     let student = {  
         name: 'Mike',
@@ -96,13 +132,13 @@ async function WriteJSON()
     };
 
     const path = "./dsconfig.json";
-    let data = await JSON.stringify(student, null, 2);
+    let data =  JSON.stringify(student, null, 2);
 
 
     const writedata = async path => {
         try
         {
-            const response = await fs.writeFile(path, data, (err) => {  
+            const response =  fs.writeFile(path, data, (err) => {  
                 if (err) throw err;
                 console.log('Data written to file');
                 return 1;
@@ -180,9 +216,15 @@ if (replay_path)
     // else
     // console.log("WE DID NOT FIND IT");
 
-    var n = await WriteJSON();
+    const path = "./dsconfig.json";
 
-    var e = await FindConfigFile();
+    let jsonwrite = writeJSONFile();
+    console.log(jsonwrite);
+    let json = await readJSONFile(path);
+    console.log(json);
+    //var n = await WriteJSON();
+
+    // var e = await FindConfigFile();
 
     var dataTree = await new ds_dataTree.DataTree("aaaa");
 
