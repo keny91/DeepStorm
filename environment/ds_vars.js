@@ -188,6 +188,8 @@ class playerData
       // PASS TALENTS FROM TEXT TO NUMBERS
       this.playerName = playerdata["name"];
       this.win = playerdata["win"];
+
+      /* Playerdata -> */
       this.stats =playerdata["gameStats"];
 
       this.build = new HeroBuild(playerdata);

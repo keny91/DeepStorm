@@ -3,7 +3,7 @@
  * interprete winrates.
  */
 
-const vars = require("./../../environment/ds_vars.js");
+const vars = require("../../environment/ds_vars.js");
 const ds_Parser = require("./ds_parser");
 
 
