@@ -16,6 +16,17 @@ const async = require("async");
 
 
 
+/* MMR  - currently Hotslogs based*/
+const TreeTypes = {
+    RawHeroDataOnly : 101,
+    TeamModel : 102,
+    SingleMap : 103,
+    SingleLeague : 104
+    // ... more added if needed
+  }
+
+
+
 const configFileName = "dsconfig.json";
 
 function DisplayBuildVersion()
@@ -121,27 +132,48 @@ function CheckHostReplayParser ()
 
 class dsConfigFile
 {
-    constructor()
+    constructor(file)
     {
+        
+            this.fileName;
+            this.filePath;
+    
+            // DeepStorm release version
+            this.DS_version;
+    
+            // dataTreeLocation
+            this.dataTreeDirectory;
+    
+            // tree type -> maybe we will have different trees
+            this.dataTreeType;
+
         // self
-        this.fileName;
-        this.filePath;
 
-        // DeepStorm release version
-        this.DS_version;
-
-        // dataTreeLocation
-        this.dataTreeDirectory;
-
-        // tree type -> maybe we will have different trees
-        this.dataTreeType;
 
     }
 
-
+    ReadFromJSONFile(file)
+    {
+        if(file != null || file!=undefined){
+            var Tree = new dsConfigFile();
+            Tree.fileName = file.fileName;
+            Tree.filePath = file.filePath;
+            // DeepStorm release version
+            Tree.DS_version= file.DS_version;
+            // dataTreeLocation
+            Tree.dataRootDirectory = file.dataRootDirectory;
+            // tree type -> maybe we will have different trees
+            Tree.dataTreeType = file.dataTreeType;
+        }
+        console.error("File is empty?!");
+    }
 }
 
 
+function CreateJSONfrom(path,object)
+{
+    
+}
 
 
 // dsLogs.dsLog = dsLog;
@@ -152,4 +184,5 @@ class dsConfigFile
 
 exports.CheckRequiredFiles = CheckRequiredFiles;
 exports.DisplayBuildVersion = DisplayBuildVersion;
+exports.dsConfigFile = dsConfigFile;
 //exports.CheckHostReplayParser = CheckHostReplayParser;
