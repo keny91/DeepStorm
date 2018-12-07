@@ -33,6 +33,7 @@
     "curl-request": "^1.1.1",
     "fast-csv": "^2.4.1",
     "hots-parser": "file:hots-parser",
+    "jsonfile": "^5.0.0",
     "node-fetch": "^2.3.0",
     "simple-git": "^1.107.0"
   }

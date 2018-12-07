@@ -4,10 +4,8 @@
 
 // Reference to load role standard by map
 
+const ds_msg = require("./../../environment/ds_messages");
 
-const DS_RETURN_OK = 1;
-const DS_RETURN_UNKNONW_ERROR = 101;
-const DS_RETURN_UNKNONW_NOT_FOUND = 102;
 
 
 
@@ -99,7 +97,7 @@ function DetermineRole_RAW ()
 function LoadMapStandards (mapSaveAFile)
 {
     // TO BE DONE
-    return DS_RETURN_OK;
+    return msg.DS_RETURN_OK;
 }
 
 

@@ -11,6 +11,8 @@ var Hots_parser_updater = ".\\git-update_hostparser.bat";
 const attrs = require(".\\..\\hots-parser\\attr.js");
 const constants = require(".\\..\\hots-parser\\constants.js");
 const ds_Parser = require("./../ds_modules/controllers/ds_parser");
+//const ds_msg = require("./ds_messages");
+
 
 
 /*  CONST TO NOT BE TOUCHED  */
@@ -18,10 +20,10 @@ const TALENT_MIN_TIER = 1;
 const TALENT_MAX_TIER = 7;
 
 
-/*  FUNCTION RETURN MSGS  - MOVE THESE TO ANOTHER DOC*/
-const DS_RETURN_OK = 1;
-const DS_RETURN_UNKNONW_ERROR = 101;
-const DS_RETURN_UNKNONW_NOT_FOUND = 102;
+const ANY =  999; // this is unlikely/impossible to get naturaly
+const WIN = 1;
+const LOSS = 0;
+
 
 
 /* MMR  - currently Hotslogs based*/
@@ -38,10 +40,7 @@ const LeagueMMR = {
 
 Files_env.Hots_parser_updater = Hots_parser_updater;
 
-const ANY =  999; // unlikely/impossible build
 
-const WIN = 1;
-const LOSS = 0;
 
 const Standard_Map_List = constants.MapType;
 
@@ -461,16 +460,11 @@ module.exports={
   TALENT_MIN_TIER : 1,
   TALENT_MAX_TIER : 7,
   
-  
-  /*  FUNCTION RETURN MSGS  - MOVE THESE TO ANOTHER DOC*/
-  DS_RETURN_OK : DS_RETURN_OK,
-  DS_RETURN_UNKNONW_ERROR : DS_RETURN_UNKNONW_ERROR,
-  DS_RETURN_UNKNONW_NOT_FOUND : DS_RETURN_UNKNONW_NOT_FOUND,
-
   DS_WIN : WIN,
   DS_LOSS : LOSS,
   DS_ANY : ANY,
   DS_BUILD_ANY : ANY,
+
 
   LeagueMMR : LeagueMMR,
   Files_env : Files_env,

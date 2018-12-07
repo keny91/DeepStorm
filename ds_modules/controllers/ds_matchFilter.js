@@ -5,6 +5,7 @@
 
 const vars = require("../../environment/ds_vars.js");
 const ds_Parser = require("./ds_parser");
+const ds_msg = require("./../../environment/ds_messages");
 
 
 /**
@@ -57,7 +58,7 @@ class MatchFilter
     set map(value)
     {
         // check if is a valid map input
-        if(ds_Parser.IsValidMap(value) == vars.DS_RETURN_OK)
+        if(ds_Parser.IsValidMap(value) == ds_msg.DS_RETURN_OK)
         {
             this._map = value;
         }

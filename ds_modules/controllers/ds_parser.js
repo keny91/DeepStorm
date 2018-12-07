@@ -5,6 +5,7 @@
 
 const parser = require("./../../hots-parser/parser.js");
 const vars = require("./../../environment/ds_vars.js");
+const ds_msg = require("./../../environment/ds_messages");
 
 
 
@@ -45,7 +46,7 @@ function IsValidMap(map)
 
     for (var m in vars.Standard_Map_List){
         if(vars.Standard_Map_List[m] == map)
-            return vars.DS_RETURN_OK;
+            return ds_msg.DS_RETURN_OK;
     }
         
     return vars.DS_RETURN_UNKNONW_NOT_FOUND;
@@ -61,10 +62,10 @@ function IsValidHero(hero)
 
     for (var m in vars.Hero_List){
         if(vars.Hero_List[m] == hero)
-            return vars.DS_RETURN_OK;
+            return ds_msg.DS_RETURN_OK;
     }
         
-    return vars.DS_RETURN_UNKNONW_NOT_FOUND;
+    return ds_msg.DS_RETURN_NOT_FOUND;
 
 }
 

@@ -8,6 +8,7 @@ const ds_matchFilter = require("./ds_modules/controllers/ds_matchFilter");
 const vars = require("./environment/ds_vars.js");
 const ds_dataTree = require("./ds_modules/controllers/ds_dataTree");
 const ds_files = require("./ds_modules/controllers/ds_files");
+const ds_init = require("./ds_modules/controllers/ds_init");
 var csv = require("fast-csv");
 const fetch = require('node-fetch');
 
@@ -144,15 +145,28 @@ if (replay_path)
         car: 'Honda' 
     };
 
-    let jsonwrite = ds_files.writeJSONFile(path, student);
-    console.log(jsonwrite);
-    let json = await ds_files.readJSONFile(path);
+    //let jsonwrite = ds_files.writeJSONFile(path, student);
+    //console.log(jsonwrite);
+    console.log(1+ "correct read");
+    let json = await ds_init.ReadConfigFromJSON(path);
+    //let json = await ds_files.readJSONFile("./AAA.txt");
     console.log(json);
-    //var n = await WriteJSON();
 
-    // var e = await FindConfigFile();
 
-    var dataTree = await new ds_dataTree.DataTree("aaaa");
+    // console.log(2+ "error read");
+    // let json2 = await ds_files.readJSONFile("./aaa.json");
+
+
+    // console.log(3 + "write");
+    // let jsonwrite = await ds_files.writeJSONFile("./aaa.json", student);
+    // console.log(jsonwrite);
+
+    // console.log(4 + "correct read 2");
+    // let json3 = await ds_files.readJSONFile("./aaa.json");
+
+
+    // // var e = await FindConfigFile();
+    // var dataTree = await new ds_dataTree.DataTree("aaaa");
 
 
     console.log(replayInfo.gameData.matchLenghtLoops);
