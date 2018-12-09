@@ -55,6 +55,20 @@ function tryWriteJSON(file, object)
 } 
 
 
+//function will check if a directory exists, and create it if it doesn't
+function createDirectory(directory, callback) {  
+    fs.stat(directory, function(err, stats) {
+      //Check if error defined and the error code is "not exists"
+      if (err && err.errno === 34) {
+        //Create the directory, call the callback.
+        fs.mkdir(directory, callback);
+      } else {
+        //just in case there was a different error:
+        callback(err)
+      }
+    });
+  }
+
 // function writeJSONFile(path, object) 
 // {
 //     return new Promise((resolve, reject) => {
@@ -81,3 +95,6 @@ function tryWriteJSON(file, object)
 
 exports.readJSONFile = tryReadJSON ;
 exports.writeJSONFile = tryWriteJSON;
+exports.createDirectory = createDirectory;
+
+
