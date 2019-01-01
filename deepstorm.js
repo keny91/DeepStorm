@@ -1,7 +1,16 @@
 /* Entry point for DeepStorm  */
 
 
-const ls = require('os');
+/** To do:
+ * 
+ * - Adquire/get winrates: talents, map, hero cross-correlation
+ * - Generate model for hero: talents, map (team independent and enemy independent)
+ * - Character models with DB_SCAN or k-means clusters (define the number of clusters or not)
+ *  (How many dimensions: Heal, dmg, self-heal, stun-time, silence... (as cc), soak, mercs)
+ * - Generate team model: from RAW role models after belonging . 
+ */
+
+//const ls = require('os');
 const init = require("./ds_modules/controllers/ds_init");
 const ds_Parser = require("./ds_modules/controllers/ds_parser");  // can take out of here
 const ds_matchFilter = require("./ds_modules/controllers/ds_matchFilter");   

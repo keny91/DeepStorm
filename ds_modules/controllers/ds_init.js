@@ -10,7 +10,7 @@
 const path = require('path');
 const ds_files = require("./ds_files");
 // const colors = require('colors');
-const source_tree = require("./../../environment/ds_sourceTree_constants.js")
+const source_tree = require("./../../environment/ds_sourceTree_constants.js");
 const pjson = require("./../../package.json");
 const ds_msg = require("./../../environment/ds_messages");
 // const simpleGit = require('simple-git')();
