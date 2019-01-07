@@ -3,11 +3,18 @@
 
 /** To do:
  * 
+ * - Math.js -> calculate desviatio on, mean, meadian, k-means, clusters,
+ * - Visual...js -> display visual clutter (alternatively get results based on ID, or the biggest desviation, or
+ *  or number of cases that pass a deviation th,...) 
  * - Adquire/get winrates: talents, map, hero cross-correlation
  * - Generate model for hero: talents, map (team independent and enemy independent)
+ * 
  * - Character models with DB_SCAN or k-means clusters (define the number of clusters or not)
  *  (How many dimensions: Heal, dmg, self-heal, stun-time, silence... (as cc), soak, mercs)
+ * 
+ * 
  * - Generate team model: from RAW role models after belonging . 
+ * 
  */
 
 //const ls = require('os');
@@ -146,13 +153,13 @@ if (replay_path)
 
     const path = "./dsconfig.json";
 
-    let student = {  
-        name: 'Mike',
-        age: 23, 
-        gender: 'Male',
-        department: 'English',
-        car: 'Honda' 
-    };
+    // let student = {  
+    //     name: 'Mike',
+    //     age: 23, 
+    //     gender: 'Male',
+    //     department: 'English',
+    //     car: 'Honda' 
+    // };
 
     //let jsonwrite = ds_files.writeJSONFile(path, student);
     //console.log(jsonwrite);

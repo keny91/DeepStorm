@@ -5,7 +5,7 @@
 
 /* Files environtments, depending on what files are required, use different exports */
 const Files_env = {};
-var Game_env ={};
+var Game_env = {};
 
 var Hots_parser_updater = ".\\git-update_hostparser.bat";
 const attrs = require(".\\..\\hots-parser\\attr.js");
@@ -20,7 +20,7 @@ const TALENT_MIN_TIER = 1;
 const TALENT_MAX_TIER = 7;
 
 
-const ANY =  999; // this is unlikely/impossible to get naturaly
+const ANY = 999; // this is unlikely/impossible to get naturaly
 const WIN = 1;
 const LOSS = 0;
 
@@ -28,12 +28,12 @@ const LOSS = 0;
 
 /* MMR  - currently Hotslogs based*/
 const LeagueMMR = {
-  BronceLeague : 500,
-  SilverLeague : 1000,
-  GoldLeague : 1500,
-  PlatinumLeague : 2000,
-  DiamondLeages : 2500,
-  MasterLeague : 4000
+  BronceLeague: 500,
+  SilverLeague: 1000,
+  GoldLeague: 1500,
+  PlatinumLeague: 2000,
+  DiamondLeages: 2500,
+  MasterLeague: 4000
 }
 
 
@@ -48,12 +48,12 @@ const Brawl_Map_List = {};
 
 
 
-function wait(ms){
+function wait(ms) {
   var start = new Date().getTime();
   var end = start;
-  while(end < start + ms) {
+  while (end < start + ms) {
     end = new Date().getTime();
- }
+  }
 }
 
 
@@ -66,8 +66,7 @@ function wait(ms){
  * ...Maybe we will add more data to these...
  */
 class Talent {
-  constructor()
-  {
+  constructor() {
     this.TalentTier = 0;
     this.TalentName = undefined;
     this.TierChoice = 0;
@@ -81,8 +80,7 @@ class Talent {
    * @param {*} tierChoice Numerated choice in the tier.
    * @param {*} tier Tier that the talent  belongs to.
    */
-  SetActiveTier(talentName, tierChoice, tier)
-  {
+  SetActiveTier(talentName, tierChoice, tier) {
     this.TalentTier = tier;
     this.TalentName = talentName;
     this.TierChoice = tierChoice;
@@ -92,8 +90,7 @@ class Talent {
   /**
    * return if the talent has been picked.
    */
-  Active()
-  {
+  Active() {
     return this.isActive;
   }
 }
@@ -103,38 +100,35 @@ class Talent {
  *  A tier can only be selected if we are pass that talent tier
  */
 class HeroBuild {
-  constructor(statData)
-    {
-      
-      
-      this.talentTier_1 = new Talent();
-      this.talentTier_2 = new Talent();
-      this.talentTier_3 = new Talent();
-      this.talentTier_4 = new Talent();
-      this.talentTier_5 = new Talent();
-      this.talentTier_6 = new Talent();
-      this.talentTier_7 = new Talent();
-      this.talentSequence = this.getTalentSequence(statData);
-      // PASS TALENTS FROM TEXT TO NUMBERS
-    };
-  
+  constructor(statData) {
+
+
+    this.talentTier_1 = new Talent();
+    this.talentTier_2 = new Talent();
+    this.talentTier_3 = new Talent();
+    this.talentTier_4 = new Talent();
+    this.talentTier_5 = new Talent();
+    this.talentTier_6 = new Talent();
+    this.talentTier_7 = new Talent();
+    this.talentSequence = this.getTalentSequence(statData);
+    // PASS TALENTS FROM TEXT TO NUMBERS
+  };
+
 
 
   /** This function fill up the talents collecting the tier choice and name. It also creates the build sequence, easy comparable 
    * 
    * @param {*} statData Player data struct
    */
-  getTalentSequence(statData)
-  {
+  getTalentSequence(statData) {
     var tierSequence = "";
 
-    for(let i = TALENT_MIN_TIER; i <= TALENT_MAX_TIER; i++)
-    {
+    for (let i = TALENT_MIN_TIER; i <= TALENT_MAX_TIER; i++) {
 
-      try{
-        let temp_tier_str = "Tier"+i+"Talent";
-        let stats_tier_ref = "talentTier_"+i;
-        let talent_tier_name = "Tier "+i+ " Choice";
+      try {
+        let temp_tier_str = "Tier" + i + "Talent";
+        let stats_tier_ref = "talentTier_" + i;
+        let talent_tier_name = "Tier " + i + " Choice";
         let ref = this;
         ref[stats_tier_ref].SetActiveTier(statData.talents[talent_tier_name], statData.gameStats[temp_tier_str], i)
         // this[stats_tier_ref].TalentTier = statData.gameStats[temp_tier_str];
@@ -143,12 +137,11 @@ class HeroBuild {
 
       }
 
-      catch (err)
-      {
-        console.error("Error during talent parsing: "+err);
+      catch (err) {
+        console.error("Error during talent parsing: " + err);
         return -1;
       }
-      
+
     }
 
     return tierSequence;
@@ -159,10 +152,8 @@ class HeroBuild {
 /**
  * Unimplemented ...
  */
-class XP_Breakdown
-{
-  constructor(replay_info)
-  {
+class XP_Breakdown {
+  constructor(replay_info) {
 
   }
 
@@ -175,25 +166,23 @@ class XP_Breakdown
 /**
  * playerData from the dataObject given the Id
  */
-class playerData
-{
-  constructor(replay_info, playerId )
-    {
-    
-      let players_list = replay_info.replayInfo.players;
-      let playerdata =  players_list[playerId];  // localized the data for that player
+class playerData {
+  constructor(replay_info, playerId) {
 
-      // Now put data to use
-      // PASS TALENTS FROM TEXT TO NUMBERS
-      this.playerName = playerdata["name"];
-      this.win = playerdata["win"];
+    let players_list = replay_info.replayInfo.players;
+    let playerdata = players_list[playerId];  // localized the data for that player
 
-      /* Playerdata -> */
-      this.stats =playerdata["gameStats"];
+    // Now put data to use
+    // PASS TALENTS FROM TEXT TO NUMBERS
+    this.playerName = playerdata["name"];
+    this.win = playerdata["win"];
 
-      this.build = new HeroBuild(playerdata);
-      
-    };
+    /* Playerdata -> */
+    this.stats = playerdata["gameStats"];
+
+    this.build = new HeroBuild(playerdata);
+
+  };
 
 }
 
@@ -205,15 +194,13 @@ class playerData
  * @param {*} replay_info Strormdata instance
  * @param {*} player_index_ingame player unique identifier
  */
-function ReadPlayerData (replay_info, player_index_ingame)
-{
-    if (replay_info instanceof StormData) 
-    {
-      /// Unfinished
-      return new playerData(replay_info, player_index_ingame);
+function ReadPlayerData(replay_info, player_index_ingame) {
+  if (replay_info instanceof StormData) {
+    /// Unfinished
+    return new playerData(replay_info, player_index_ingame);
 
-    }
-    return {NULL};
+  }
+  return { NULL };
 }
 
 
@@ -221,10 +208,8 @@ function ReadPlayerData (replay_info, player_index_ingame)
 /**
  * Create a gameData instance from the parsed (hots-parser) data from a replay.
  */
-class GameData 
-{
-  constructor(replaydata)
-  {
+class GameData {
+  constructor(replaydata) {
     this.firstFortbyWinningTeam = -1;
     this.firstKeepbyWinningTeam = -1;
     this.firstObjectivebyWinningTeam = -1;
@@ -240,8 +225,7 @@ class GameData
    * 
    * @param {*} replaydata the 'hots-parser' replay data.
    */
-  setGameData (replaydata)
-  {
+  setGameData(replaydata) {
     this.firstFortbyWinningTeam = replaydata.match.firstFortWin;
     this.firstKeepbyWinningTeam = replaydata.match.firstKeepWin;
     this.firstObjectivebyWinningTeam = replaydata.match.firstObjectiveWin;
@@ -250,23 +234,21 @@ class GameData
     this.matchStartLoops = replaydata.match.loopGameStart;
     this.map = replaydata.match.map;
     this.mode = replaydata.match.mode;
-    
+
   }
 }
 
 /**
  * Team class contains information regarding all (5) players and combined stats.
  */
-class Team 
-{
-  constructor(isWinner)
-  {
+class Team {
+  constructor(isWinner) {
     // declare empty players array
     //this.Players = new playerData();
     this.Players = []; // array declaration
-    this.nof_players_processed = 0; 
+    this.nof_players_processed = 0;
     this.win = isWinner;
-    this.teamLVL =-1;
+    this.teamLVL = -1;
     this.teamTakeDowns = 0;
     this.teamDeaths = 0;
 
@@ -291,21 +273,18 @@ class Team
    * @param {*} player playerData object instance, it will be allocated in the winning 
    * or losing team accordingly. 
    */
-  Addplayer(player)
-  {
-    if (player instanceof playerData) 
-    {
+  Addplayer(player) {
+    if (player instanceof playerData) {
       // verify that we are putting a win/lose player in the right team
-      if(player.win != this.win) 
+      if (player.win != this.win)
         return null;
-      
-      
+
+
       this.Players.push(player); // push not valid for objects
 
-      this.nof_players_processed ++;
+      this.nof_players_processed++;
     }
-    else
-    {
+    else {
       return null;
     }
   }
@@ -314,12 +293,11 @@ class Team
    * 
    * @param {*} value Number of takedons 
    */
-  setTeamTakeDowns (value)
-  {
+  setTeamTakeDowns(value) {
     if (value < 0)
-      console.error("Invalid value input for teamTakeDowns: "+value);
+      console.error("Invalid value input for teamTakeDowns: " + value);
     /* ERRROR HERE */
-    else 
+    else
       this.teamTakeDowns = value;
 
   }
@@ -328,12 +306,11 @@ class Team
    * 
    * @param {*} value Number of deaths 
    */
-  setTeamTakeDeaths (value)
-  {
+  setTeamTakeDeaths(value) {
     if (value < 0)
-    console.error("Invalid value input for teamTakeDeaths: "+value);
+      console.error("Invalid value input for teamTakeDeaths: " + value);
     /* ERRRR HERE */
-    else 
+    else
       this.teamDeaths = value;
 
   }
@@ -346,13 +323,14 @@ class Team
 /**
  * Object containing the  replaydata, along with our processed information: Teams, players,
  */
-class StormData{
-    
-  constructor(file)
-  {
-    var options ={};
+class StormData {
+
+  constructor(file) {
+    var options = {};
     /* Read info directly using the hots-parser API */
-    this.replayInfo = ds_Parser.processReplay(file, options);
+    // this.replayInfo = ds_Parser.processReplay(file, options);
+    let path_relative = "./../"+file;
+    this.replayInfo = ds_Parser.processReplay(path_relative, options);
 
     // empty for now, fill teams
     this.winTeam = new Team(true); // win team
@@ -372,21 +350,18 @@ class StormData{
   /**
    *  Process that should happen during the constructor
    */
-  ProcessReplayData()
-  {
+  ProcessReplayData() {
     this.winnerTeamID = this.replayInfo.match.winner;
 
     //this.replayInfo.match
-        // put this somewhere, not in the constructor
-    if(this.winnerTeamID == 0)
-    {
+    // put this somewhere, not in the constructor
+    if (this.winnerTeamID == 0) {
       this.winTeam.setTeamTakeDeaths(this.replayInfo.match.team0Takedowns);
       this.winTeam.setTeamTakeDowns(this.replayInfo.match.team1Takedowns);
       this.loseTeam.setTeamTakeDeaths(this.replayInfo.match.team1Takedowns);
       this.loseTeam.setTeamTakeDowns(this.replayInfo.match.team0Takedowns);
     }
-    else
-    {
+    else {
       this.winTeam.setTeamTakeDeaths(this.replayInfo.match.team1Takedowns);
       this.winTeam.setTeamTakeDowns(this.replayInfo.match.team0Takedowns);
       this.loseTeam.setTeamTakeDeaths(this.replayInfo.match.team0Takedowns);
@@ -394,46 +369,41 @@ class StormData{
     }
 
     // read all other info regarding game -> isnt this ProcessReplayData();
-    this.gameData.setGameData(this.replayInfo); 
+    this.gameData.setGameData(this.replayInfo);
   }
 
   /* After this function runs, we will have all the data we need in our structure. We won´t need HotsParser anymore */
-  ProcessAllPlayersData()
-  {
-      let players_list = this.replayInfo.players;
-      let player_ids = this.replayInfo.match.playerIDs;
+  ProcessAllPlayersData() {
+    let players_list = this.replayInfo.players;
+    let player_ids = this.replayInfo.match.playerIDs;
 
-      // Check all players taking part in the match
-      for (let player in player_ids)
-      {
+    // Check all players taking part in the match
+    for (let player in player_ids) {
 
-        let player_id = player_ids[player];
-        //let player_data = players_list[player_id];
+      let player_id = player_ids[player];
+      //let player_data = players_list[player_id];
 
-        let playerdata = ReadPlayerData (this, player_id);
+      let playerdata = ReadPlayerData(this, player_id);
 
-        // Add playerIndex to winning or losing team list
-        if(playerdata["win"] == true)
-        { 
-          this.winTeam.Addplayer(playerdata);
-            //this.winPlayers.push(player_id);  
-        } 
-        else
-        {
-          this.loseTeam.Addplayer(playerdata);
-             //this.losePlayers.push(player_id);  
-        }
-
-          
-      /* More */
-
+      // Add playerIndex to winning or losing team list
+      if (playerdata["win"] == true) {
+        this.winTeam.Addplayer(playerdata);
+        //this.winPlayers.push(player_id);  
+      }
+      else {
+        this.loseTeam.Addplayer(playerdata);
+        //this.losePlayers.push(player_id);  
       }
 
-      return 1;
+
+      /* More */
+
+    }
+
+    return 1;
   }
 
-  getMatchLenght()
-  {
+  getMatchLenght() {
     return this.gameData.matchLenghtLoops;
   }
 
@@ -456,24 +426,24 @@ class StormData{
 
 
 /*  CONST TO NOT BE TOUCHED  */
-module.exports={
-  TALENT_MIN_TIER : 1,
-  TALENT_MAX_TIER : 7,
-  
-  DS_WIN : WIN,
-  DS_LOSS : LOSS,
-  DS_ANY : ANY,
-  DS_BUILD_ANY : ANY,
+module.exports = {
+  TALENT_MIN_TIER: 1,
+  TALENT_MAX_TIER: 7,
+
+  DS_WIN: WIN,
+  DS_LOSS: LOSS,
+  DS_ANY: ANY,
+  DS_BUILD_ANY: ANY,
 
 
-  LeagueMMR : LeagueMMR,
-  Files_env : Files_env,
-  Standard_Map_List : Standard_Map_List,
-  Hero_List : attrs.heroAttribute,
-  StormData : StormData,
-  playerData : playerData,
-  game_data : constants
-  }
+  LeagueMMR: LeagueMMR,
+  Files_env: Files_env,
+  Standard_Map_List: Standard_Map_List,
+  Hero_List: attrs.heroAttribute,
+  StormData: StormData,
+  playerData: playerData,
+  game_data: constants
+}
 
 
 
