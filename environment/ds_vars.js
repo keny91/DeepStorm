@@ -329,8 +329,7 @@ class StormData {
     var options = {};
     /* Read info directly using the hots-parser API */
     // this.replayInfo = ds_Parser.processReplay(file, options);
-    let path_relative = "./../"+file;
-    this.replayInfo = ds_Parser.processReplay(path_relative, options);
+    this.replayInfo = ds_Parser.processReplay(file, options);
 
     // empty for now, fill teams
     this.winTeam = new Team(true); // win team

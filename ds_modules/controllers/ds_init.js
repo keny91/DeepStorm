@@ -127,10 +127,10 @@ function ReadConfigFromJSON(path)
     }
     //console.log.error("Could not read config file")
     
-    return ds_files.readJSONFile(path)
+    return ds_files.ReadFromJSONFile(path)
     .then(res => {
         
-        configFile.readJSONFile(res);
+        configFile.ReadFromJSONFile(res);
         //  if debug_enabled
         // console.dir(object);
         console.log('Write CONFIG JSON complete');

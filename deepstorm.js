@@ -142,7 +142,8 @@ console.log(a);
 if (replay_path)
 {
     let check;
-    var replayInfo = new vars.StormData(replay_path);
+    var global_replay_path = ds_files.convertToGlobalPath(replay_path);
+    var replayInfo = new vars.StormData(global_replay_path);
     
    // const ans = await ds_dataTree.askQuestion("Are you sure you want to deploy to PRODUCTION? ");
 

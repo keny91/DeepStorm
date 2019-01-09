@@ -6,14 +6,16 @@
 const fs = require('fs');
 const jsonfile = require('jsonfile');
 const ds_msg = require("./../../environment/ds_messages");
+var resolve = require('path').resolve;
 
-
-/** Read a json file
+/** Support function to convert relative to global path.
  * 
- * @param {string} file path to file
+ * @param {string} path 
  */
-
-
+function convertToGlobalPath(path)
+{
+    return resolve(path);
+}
 
 /** Read a json file
  * 
@@ -96,5 +98,6 @@ function createDirectory(directory, callback) {
 exports.readJSONFile = tryReadJSON ;
 exports.writeJSONFile = tryWriteJSON;
 exports.createDirectory = createDirectory;
+exports.convertToGlobalPath = convertToGlobalPath;
 
 
