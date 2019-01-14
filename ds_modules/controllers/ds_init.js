@@ -13,6 +13,7 @@ const ds_files = require("./ds_files");
 const source_tree = require("./../../environment/ds_sourceTree_constants.js");
 const pjson = require("./../../package.json");
 const ds_msg = require("./../../environment/ds_messages");
+const popups = require('popups');
 // const simpleGit = require('simple-git')();
 // const async = require("async");
 
@@ -60,7 +61,7 @@ class dsConfigFile
     constructor()
     {
         
-            this.fileName;
+            this.projectName;
             this.filePath;
     
             // DeepStorm release version
@@ -82,10 +83,10 @@ class dsConfigFile
         if(file != null || file!=undefined)
         {
             //var Tree = new dsConfigFile();  // what was I thinking?
-            if(file.fileName != undefined)
-                this.fileName = file.fileName;
+            if(file.projectName != undefined)
+                this.projectName = file.projectName;
             else{
-                console.warn("Filename attr not found in JSON.");
+                console.warn("projectName attr not found in JSON.");
             }
 
             if(file.DS_version != undefined)
@@ -119,7 +120,7 @@ class dsConfigFile
     CreateDefault()
     {
         this.dataTreeType = TreeTypes.Default;
-        this.fileName = DEFAULT_CONFIG_FILE_PATH;
+        this.projectName = ds_files.convertToGlobalPath(DEFAULT_CONFIG_FILE_PATH);
         this.dataRootDirectory = DEFAULT_DATA_FILE_PATH;
         this.DS_version = pjson.version;
         
@@ -139,6 +140,7 @@ async function ReadConfigFromJSON(path)
     //
     if(file != ds_msg.DS_RETURN_NOT_FOUND)
     {
+        Popup_YESorNO(string_info, callback);
         configFile.ReadFromJSONFile(file);
     }
 
@@ -167,9 +169,37 @@ async function ReadConfigFromJSON(path)
 
 
 
-
+function callback_test1(input)
+{
+    if(input)
+        console.log(":D");
+    else
+        console.log("D:");
+}
 
 /********************* */
+
+function Popup_YESorNO(string_info, callback)
+{
+    var input;
+    popupS.confirm({
+        content:     '<b>'+string_info+'</b>',
+        labelOk:     'Yes',
+        labelCancel: 'No',
+        onSubmit: function() {
+            //accepted
+            callback(1);
+
+            //console.log(':)');
+        },
+        onClose: function() {
+            callback(0);
+           // console.log(':(');
+        }
+    });
+}
+
+ 
 
 
 

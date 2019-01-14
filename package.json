@@ -35,6 +35,7 @@
     "hots-parser": "file:hots-parser",
     "jsonfile": "^5.0.0",
     "node-fetch": "^2.3.0",
+    "popups": "^1.1.3",
     "random-number": "0.0.9",
     "simple-git": "^1.107.0"
   }
