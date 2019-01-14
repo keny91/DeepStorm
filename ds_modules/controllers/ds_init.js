@@ -18,7 +18,9 @@ const ds_msg = require("./../../environment/ds_messages");
 
 
 
-/* MMR  - currently Hotslogs based*/
+/* MMR  - currently Hotslogs based
+Need to define types with some wording.
+*/
 const TreeTypes = {
     Default : 100,
     RawHeroDataOnly : 101,
@@ -77,18 +79,41 @@ class dsConfigFile
 
     ReadFromJSONFile(file)
     {
-        if(file != null || file!=undefined){
-            var Tree = new dsConfigFile();
-            this.fileName = file.fileName;
+        if(file != null || file!=undefined)
+        {
+            //var Tree = new dsConfigFile();  // what was I thinking?
+            if(file.fileName != undefined)
+                this.fileName = file.fileName;
+            else{
+                console.warn("Filename attr not found in JSON.");
+            }
+
+            if(file.DS_version != undefined)
+                this.DS_version= file.DS_version;
+            else{
+                console.warn("DS_version attr not found in JSON.");
+            }
+
+            if(file.dataRootDirectory != undefined)
+                this.dataRootDirectory= file.dataRootDirectory;
+            else{
+                console.warn("dataRootDirectory attr not found in JSON.");
+            }
             //this.filePath = file.filePath;
             // DeepStorm release version
-            this.DS_version= file.DS_version;
-            // dataTreeLocation
-            this.dataRootDirectory = file.dataRootDirectory;
-            // tree type -> maybe we will have different trees
-            this.dataTreeType = file.dataTreeType;
+            
+            if(file.dataTreeType != undefined)
+                this.dataTreeType= file.dataTreeType;
+            else{
+                console.warn("dataTreeType attr not found in JSON.");
+            }
+
         }
-        console.error("File is empty?!");
+        else
+        {
+            console.error("File is empty?!");
+        }
+        
     }
 
     CreateDefault()
@@ -101,45 +126,43 @@ class dsConfigFile
     }
 }
 
-
-function ReadConfigFromJSON(path)
+/** Read the config file for a study set.
+ * If successfull
+ * 
+ * @param {Path to config.json} path 
+ * @returns {object} dsConfig object, DS_RETURN_NOT_FOUND, DS_RETURN_UNKNONW_ERROR
+ */
+async function ReadConfigFromJSON(path)
 {
     var configFile = new dsConfigFile();
-    let file = ds_files.readJSONFile(path);
+    let file = await ds_files.readJSONFile(path);
     //
     if(file != ds_msg.DS_RETURN_NOT_FOUND)
     {
         configFile.ReadFromJSONFile(file);
     }
 
-    // case we could not find the config file -> so we create one
+    
+    // // case we could not find the config file -> so we create one
     else
     {
         checkDirectory("./logs/", function(error) {  
             if(error) {
-              console.log("oh no!!!", error);
-              fs
-            } else {
+              console.log("Loading config not found: ", error);
+              configFile.CreateDefault();
+
+            } else 
+            {
+                return ds_msg.DS_RETURN_UNKNONW_ERROR;
               //Carry on, all good, directory exists / created.
             }
           });
 
-    }
-    //console.log.error("Could not read config file")
-    
-    return ds_files.ReadFromJSONFile(path)
-    .then(res => {
         
-        configFile.ReadFromJSONFile(res);
-        //  if debug_enabled
-        // console.dir(object);
-        console.log('Write CONFIG JSON complete');
-        return(ds_msg.DS_RETURN_OK);
-    })
-    .catch(rej => {
-        console.error(rej);
-        return rej;
-    })
+    }
+    // success scenario
+    return configFile;
+
 }
 
 
