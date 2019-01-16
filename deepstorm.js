@@ -29,6 +29,10 @@ var csv = require("fast-csv");
 const fetch = require('node-fetch');
 
 
+if (ds_files.fileExist("./dsconfig.json"))
+    var config = require ("./dsconfig.json");
+
+
 //const StormData = require("./environment/ds_vars");
 
 //const replay_sample = require("./samples/CH_gamemode_leagueT_leagueB_000000.StormReplay");

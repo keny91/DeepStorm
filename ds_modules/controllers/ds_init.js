@@ -13,7 +13,6 @@ const ds_files = require("./ds_files");
 const source_tree = require("./../../environment/ds_sourceTree_constants.js");
 const pjson = require("./../../package.json");
 const ds_msg = require("./../../environment/ds_messages");
-const popups = require('popups');
 // const simpleGit = require('simple-git')();
 // const async = require("async");
 
@@ -36,8 +35,6 @@ const DEFAULT_CONFIG_FILE_PATH = "./dsconfig.json";
 const DEFAULT_DATA_FILE_PATH = "./dsData"
 
 
-const configFileName = "dsconfig.json";
-
 function DisplayBuildVersion()
 {
     if (pjson) 
@@ -55,7 +52,11 @@ function DisplayBuildVersion()
 }
 
 
-
+/** Read the config file for a study set.
+ * If successfull we will load all the projects available in the file into this structure.
+ * Follow up with the callback to ask to load the latests project.
+ * 
+ */
 class dsConfigFile
 {
     constructor()
@@ -127,9 +128,7 @@ class dsConfigFile
     }
 }
 
-/** Read the config file for a study set.
- * If successfull
- * 
+/**
  * @param {Path to config.json} path 
  * @returns {object} dsConfig object, DS_RETURN_NOT_FOUND, DS_RETURN_UNKNONW_ERROR
  */
@@ -140,7 +139,7 @@ async function ReadConfigFromJSON(path)
     //
     if(file != ds_msg.DS_RETURN_NOT_FOUND)
     {
-        Popup_YESorNO(string_info, callback);
+      // Popup_YESorNO(string_info, callback);
         configFile.ReadFromJSONFile(file);
     }
 
@@ -172,32 +171,41 @@ async function ReadConfigFromJSON(path)
 function callback_test1(input)
 {
     if(input)
+    {
         console.log(":D");
+    }
+
     else
+    {
         console.log("D:");
+    }
+
+    // do x
+
+    return ;
 }
 
 /********************* */
 
-function Popup_YESorNO(string_info, callback)
-{
-    var input;
-    popupS.confirm({
-        content:     '<b>'+string_info+'</b>',
-        labelOk:     'Yes',
-        labelCancel: 'No',
-        onSubmit: function() {
-            //accepted
-            callback(1);
+// function Popup_YESorNO(string_info, callback)
+// {
+//     var input;
+//     popupS.confirm({
+//         content:     '<b>'+string_info+'</b>',
+//         labelOk:     'Yes',
+//         labelCancel: 'No',
+//         onSubmit: function() {
+//             //accepted
+//             callback(1);
 
-            //console.log(':)');
-        },
-        onClose: function() {
-            callback(0);
-           // console.log(':(');
-        }
-    });
-}
+//             //console.log(':)');
+//         },
+//         onClose: function() {
+//             callback(0);
+//            // console.log(':(');
+//         }
+//     });
+// }
 
  
 
