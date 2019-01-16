@@ -17,6 +17,31 @@
  * 
  */
 
+
+
+/*
+{
+"version":"0.0.1",
+"nof_projects":30,
+"last_opened":0,
+"projects":[ 
+    {
+        "id":0,
+        "rootFolder": "absolute_local_path",
+        "projectName":"test1",
+        "dataTreeType": 100,
+    },
+    {
+        "id":1,
+        "rootFolder": "absolute_local_path2",
+        "projectName":"test2",
+        "dataTreeType": 101,
+    } ]
+}
+*/
+
+
+
 //const ls = require('os');
 const init = require("./ds_modules/controllers/ds_init");
 const ds_Parser = require("./ds_modules/controllers/ds_parser");  // can take out of here
@@ -30,8 +55,15 @@ const fetch = require('node-fetch');
 
 
 if (ds_files.fileExist("./dsconfig.json"))
+{
     var config = require ("./dsconfig.json");
-
+}  
+else
+{
+    console.warn("No \"dsConfig.json\" was found. Using default settings.")
+    var config = ds_init.CreateDefaultConfig();
+}
+    
 
 //const StormData = require("./environment/ds_vars");
 

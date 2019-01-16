@@ -30,9 +30,10 @@ const TreeTypes = {
     // ... more added if needed
   }
 
+const DS_VERSION = pjson.version;
 
 const DEFAULT_CONFIG_FILE_PATH = "./dsconfig.json";
-const DEFAULT_DATA_FILE_PATH = "./dsData"
+
 
 
 function DisplayBuildVersion()
@@ -52,78 +53,175 @@ function DisplayBuildVersion()
 }
 
 
+/*
+{
+"version":"0.0.1",
+"nof_projects":30,
+"last_opened":0,
+"projects":[ 
+    {
+        "id":0,
+        "rootDirectory": "absolute_local_path",
+        "projectName":"test1",
+        "dataTreeType": 100,
+    },
+    {
+        "id":1,
+        "rootDirectory": "absolute_local_path2",
+        "projectName":"test2",
+        "dataTreeType": 101,
+    } ]
+}
+*/
+
+
+class dsProject{
+    constructor()
+    {
+        this.id;
+        this.rootDirectory;
+        this.projectName;
+        this.dataTreeType;
+    }
+
+    load(file)
+    {
+        this.id = file.id;
+        this.rootDirectory = file.rootDirectory;
+        this.projectName = file.projectName;
+        this.dataTreeType = file.dataTreeType;
+    }
+
+
+}
+
+
 /** Read the config file for a study set.
  * If successfull we will load all the projects available in the file into this structure.
  * Follow up with the callback to ask to load the latests project.
  * 
  */
-class dsConfigFile
+class dsConfig
 {
     constructor()
     {
         
-            this.projectName;
-            this.filePath;
     
             // DeepStorm release version
-            this.DS_version;
-    
-            // dataTreeLocation
-            this.dataTreeDirectory;
-    
-            // tree type -> maybe we will have different trees
-            this.dataTreeType;
-
-        // self
-
+            this.version;
+            this.projects = [];
+            this.lastOpenedID;
 
     }
 
-    ReadFromJSONFile(file)
+    /**
+     * This function has to be internally changed
+     * @param {*} jsonFile 
+     */
+    ReadFromJSON(jsonFile)
     {
-        if(file != null || file!=undefined)
+        // is the file empty
+        if(jsonFile != null || jsonFile!=undefined)
         {
-            //var Tree = new dsConfigFile();  // what was I thinking?
-            if(file.projectName != undefined)
-                this.projectName = file.projectName;
-            else{
-                console.warn("projectName attr not found in JSON.");
+            // version
+            if(jsonFile.version != undefined)
+                this.version = jsonFile.version;
+            else
+            {
+                console.warn("\"Version\" attr not found in JSON.");
             }
 
-            if(file.DS_version != undefined)
-                this.DS_version= file.DS_version;
-            else{
-                console.warn("DS_version attr not found in JSON.");
+            if(jsonFile.nof_projects != undefined)
+                this.nof_projects = jsonFile.nof_projects;
+            else
+            {
+                console.warn("\"nof_projects\" attr not found in JSON.");
             }
-
-            if(file.dataRootDirectory != undefined)
-                this.dataRootDirectory= file.dataRootDirectory;
-            else{
-                console.warn("dataRootDirectory attr not found in JSON.");
-            }
-            //this.filePath = file.filePath;
-            // DeepStorm release version
             
-            if(file.dataTreeType != undefined)
-                this.dataTreeType= file.dataTreeType;
-            else{
-                console.warn("dataTreeType attr not found in JSON.");
+            if(jsonFile.lastOpenedID != undefined)
+                this.lastOpenedID = jsonFile.lastOpenedID;
+            else
+            {
+                console.warn("\"lastOpenedID\" attr not found in JSON.");
             }
 
+            if(jsonFile.projects != undefined)
+                this.projects = jsonFile.projects;
+            else
+            {
+                console.warn("\"projects\" attr not found in JSON.");
+            }
         }
+
         else
         {
-            console.error("File is empty?!");
+            console.error("jsonFile is empty?!");
         }
         
     }
 
+    getProjects()
+    {
+        // if(this.undefined )
+        // {
+        //     console.warn()
+        // }
+        // return 
+    }
+
+    /**
+     * Get the last project that was loaded by deepStorm
+     */
+    getLastLoadedProject()
+    {
+        for(let i;i<this.nof_projects;i++)
+        {
+            //found it
+            if(this.projects[i].id == this.lastOpenedID)
+            {
+                var projectObj = new dsProject();
+                projectObj.load(this.projects[i]);
+                return projectObj;
+            }
+        }
+
+        return ds_msg.DS_RETURN_NOT_FOUND;
+    }
+
+    /**
+     * Get a project stored in the config file with a certain ID.
+     * @param {Number} the_id Numeric identificator for the project.
+     */
+    getProjectWithID(the_id)
+    {
+        for(let i;i<this.nof_projects;i++)
+        {
+            if(this.projects[i].id == the_id)
+            {
+                var projectObj = new dsProject();
+                projectObj.load(this.projects[i]);
+                return projectObj;
+            }
+        }
+        return ds_msg.DS_RETURN_NOT_FOUND;
+    }
+
+    saveConfigFile()
+    {
+
+    }
+
+
     CreateDefault()
     {
-        this.dataTreeType = TreeTypes.Default;
-        this.projectName = ds_files.convertToGlobalPath(DEFAULT_CONFIG_FILE_PATH);
-        this.dataRootDirectory = DEFAULT_DATA_FILE_PATH;
-        this.DS_version = pjson.version;
+            this.version = DS_VERSION;
+            // dataTreeLocation
+
+            // 
+            this.projects = [];
+
+            // 
+            this.lastOpenedID;
         
     }
 }
@@ -134,13 +232,13 @@ class dsConfigFile
  */
 async function ReadConfigFromJSON(path)
 {
-    var configFile = new dsConfigFile();
+    var configFile = new dsConfig();
     let file = await ds_files.readJSONFile(path);
     //
     if(file != ds_msg.DS_RETURN_NOT_FOUND)
     {
       // Popup_YESorNO(string_info, callback);
-        configFile.ReadFromJSONFile(file);
+        configFile.ReadFromJSON(file);
     }
 
     
@@ -149,7 +247,7 @@ async function ReadConfigFromJSON(path)
     {
         checkDirectory("./logs/", function(error) {  
             if(error) {
-              console.log("Loading config not found: ", error);
+              console.log("Loading config not found, creating a new default file...");
               configFile.CreateDefault();
 
             } else 
@@ -307,6 +405,7 @@ function callback_test1(input)
 
 // exports.CheckRequiredFiles = CheckRequiredFiles;
 exports.DisplayBuildVersion = DisplayBuildVersion;
-exports.dsConfigFile = dsConfigFile;
+exports.dsConfig = dsConfig;
+exports.dsProject = dsProject;
 exports.ReadConfigFromJSON = ReadConfigFromJSON;
 //exports.CheckHostReplayParser = CheckHostReplayParser;

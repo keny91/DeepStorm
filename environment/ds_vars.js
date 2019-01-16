@@ -323,7 +323,8 @@ class Team {
 /**
  * Object containing the  replaydata, along with our processed information: Teams, players,
  */
-class StormData {
+class StormData 
+{
 
   constructor(file) {
     var options = {};
