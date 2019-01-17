@@ -29,13 +29,13 @@
         "id":0,
         "rootFolder": "absolute_local_path",
         "projectName":"test1",
-        "dataTreeType": 100,
+        "dataTreeType": 100
     },
     {
         "id":1,
         "rootFolder": "absolute_local_path2",
         "projectName":"test2",
-        "dataTreeType": 101,
+        "dataTreeType": 101
     } ]
 }
 */
@@ -50,20 +50,14 @@ const vars = require("./environment/ds_vars.js");
 const ds_dataTree = require("./ds_modules/controllers/ds_dataTree");
 const ds_files = require("./ds_modules/controllers/ds_files");
 const ds_init = require("./ds_modules/controllers/ds_init");
+const ds_msg = require("./environment/ds_messages");
 var csv = require("fast-csv");
 const fetch = require('node-fetch');
 
+const CONFIG_FILE_DEFAULT_PATH = "./dsconfig.json";
 
-if (ds_files.fileExist("./dsconfig.json"))
-{
-    var config = require ("./dsconfig.json");
-}  
-else
-{
-    console.warn("No \"dsConfig.json\" was found. Using default settings.")
-    var config = ds_init.CreateDefaultConfig();
-}
-    
+
+
 
 //const StormData = require("./environment/ds_vars");
 
@@ -140,14 +134,6 @@ async function MakeHotsapiRequest()
 
 async function main()
 {
-/*  Execute in order */
-init.DisplayBuildVersion();
-
-
-
-var a = await MakeHotsapiRequest();
-console.log(a);
-// linear -> wait till done
 
 
 /** TEST PROCESS:
@@ -156,7 +142,7 @@ console.log(a);
  * 
  *      TREE_SOURCE_LOAD
  *      1) TRY read storm_config.json
- *           1-1 (SUCCESS) TRY load Tree_file.json (information of the tree)
+ *           1-1 (SUCCESS) TRY load Tree_file.json (information of the tree -> root of the tree is indicated by dsconfig)
  *              1-1-1 (SUCCESS) Load the Tree_file.json as DataTree instance
  *              1-1-2 (NOT-FOUND/ERROR) Report error
  *           1-2 (NOT_FOUND) ASK to create tree at DEFAULT location or a path -> create at path
@@ -173,6 +159,23 @@ console.log(a);
  * 
  */
 
+/*  Execute in order */
+
+/* Start here    */
+init.DisplayBuildVersion();
+
+
+/*  S */
+
+
+
+
+var a = await MakeHotsapiRequest();
+console.log(a);
+// linear -> wait till done
+
+
+
 
 //
 if (replay_path)
@@ -188,39 +191,27 @@ if (replay_path)
     // else
     // console.log("WE DID NOT FIND IT");
 
-    const path = "./dsconfig.json";
 
-    // let student = {  
-    //     name: 'Mike',
-    //     age: 23, 
-    //     gender: 'Male',
-    //     department: 'English',
-    //     car: 'Honda' 
-    // };
 
     //let jsonwrite = ds_files.writeJSONFile(path, student);
     //console.log(jsonwrite);
-    console.log(1+ "correct read");
-    let json = await ds_init.ReadConfigFromJSON(path);
-    //let json = await ds_files.readJSONFile("./AAA.txt");
-    console.log(json);
+
+    var global_congig_path = ds_files.convertToGlobalPath(CONFIG_FILE_DEFAULT_PATH);
+
+    // Try read from json file in the root file, if not found create a default config
+    var dsconfig = await ds_init.ReadConfigFromJSON(global_congig_path);
+    if (dsconfig == ds_msg.DS_RETURN_UNKNONW_ERROR) 
+    {
+        console.error("Exception found, exiting")
+        return;
+    }
+
+    // check to verify that settings were properly logged.
+    console.log(dsconfig);
 
 
-    // console.log(2+ "error read");
-    // let json2 = await ds_files.readJSONFile("./aaa.json");
-
-
-    // console.log(3 + "write");
-    // let jsonwrite = await ds_files.writeJSONFile("./aaa.json", student);
-    // console.log(jsonwrite);
-
-    // console.log(4 + "correct read 2");
-    // let json3 = await ds_files.readJSONFile("./aaa.json");
-
-
-    // // var e = await FindConfigFile();
-    // var dataTree = await new ds_dataTree.DataTree("aaaa");
-
+    //var dsconfig = ds_init.dsConfig();
+    //dsconfig.ReadConfigFromJSON();
 
     console.log(replayInfo.gameData.matchLenghtLoops);
     console.log(ds_Parser.LoopsToSeconds(replayInfo.gameData.matchLenghtLoops));

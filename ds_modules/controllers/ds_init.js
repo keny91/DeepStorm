@@ -114,6 +114,20 @@ class dsConfig
 
     }
 
+    ReadFromPath(path)
+    {
+        if (ds_files.fileExist("./dsconfig.json"))
+        {
+            var config = require ("./dsconfig.json");
+        }  
+        else
+        {
+            console.warn("No \"dsConfig.json\" was found. Using default settings.")
+            var config = ds_init.CreateDefaultConfig();
+        }
+    
+    }
+
     /**
      * This function has to be internally changed
      * @param {*} jsonFile 
@@ -206,9 +220,28 @@ class dsConfig
         return ds_msg.DS_RETURN_NOT_FOUND;
     }
 
-    saveConfigFile()
+
+    /**
+     * Verify that the structure does not contain inconsitencies:
+     * ex) 2 projects with the same id, "nof_projects" not matching the actual number, ...
+     */
+    verifyIntegrity()
     {
 
+    }
+
+
+    /** 
+     * 
+     */
+    saveConfigFileAsJson()
+    {
+        /*Step 1: put all the structures into a similar disposition as we intent to load it */
+
+        /* 1.2 - Projects to array */
+
+        /*Step 2: save as .json*/
+        ds_files.writeJSONFile("./dsconfig.json",this);
     }
 
 
@@ -232,33 +265,28 @@ class dsConfig
  */
 async function ReadConfigFromJSON(path)
 {
-    var configFile = new dsConfig();
-    let file = await ds_files.readJSONFile(path);
-    //
-    if(file != ds_msg.DS_RETURN_NOT_FOUND)
-    {
-      // Popup_YESorNO(string_info, callback);
-        configFile.ReadFromJSON(file);
-    }
-
     
-    // // case we could not find the config file -> so we create one
+    var configFile = new dsConfig();
+
+    // if the file exists
+    if (ds_files.fileExist(path))
+    {
+        //var config = require ("./dsconfig.json");
+        let file = await ds_files.readJSONFile(path);
+        if(file != ds_msg.DS_RETURN_NOT_FOUND)
+        {
+            configFile.ReadFromJSON(file);
+        }
+        else
+            return ds_msg.DS_RETURN_UNKNONW_ERROR;
+    }  
+    // // case we could not find the config file -> so we create a default one
     else
     {
-        checkDirectory("./logs/", function(error) {  
-            if(error) {
-              console.log("Loading config not found, creating a new default file...");
-              configFile.CreateDefault();
-
-            } else 
-            {
-                return ds_msg.DS_RETURN_UNKNONW_ERROR;
-              //Carry on, all good, directory exists / created.
-            }
-          });
-
-        
+        console.log("Loading config not found, creating a new default file...");
+        configFile.CreateDefault();        
     }
+
     // success scenario
     return configFile;
 

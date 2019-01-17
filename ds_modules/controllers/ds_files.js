@@ -62,9 +62,6 @@ function tryWriteJSON(file, object)
 {
     return jsonfile.writeFile(file, object)
     .then(res => {
-        //  if debug_enabled
-        // console.dir(object);
-        // console.log('Write complete');
         return(ds_msg.DS_RETURN_OK);
     })
     .catch(error => {
