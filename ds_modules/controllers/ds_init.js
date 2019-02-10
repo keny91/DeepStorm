@@ -9,12 +9,24 @@
 // const fs = require('fs');
 const path = require('path');
 const ds_files = require("./ds_files");
+const fs  = require("fs");
 // const colors = require('colors');
 const source_tree = require("./../../environment/ds_sourceTree_constants.js");
 const pjson = require("./../../package.json");
 const ds_msg = require("./../../environment/ds_messages");
 // const simpleGit = require('simple-git')();
 // const async = require("async");
+
+
+
+
+const ProjectStatus= 
+{
+    STATUS_OK : 0,
+    STATUS_BAD_PROJECT_NAME: 1,
+    STATUS_NON_UNIQUE_ID : 2,
+    STATUS_UNKNOWN : 300
+}
 
 
 
@@ -34,6 +46,13 @@ const DS_VERSION = pjson.version;
 
 const DEFAULT_CONFIG_FILE_PATH = "./dsconfig.json";
 
+
+
+
+async function CreateBaseTreeFolders(rootFolder, treeType)
+{
+
+}
 
 
 function DisplayBuildVersion()
@@ -75,10 +94,16 @@ function DisplayBuildVersion()
 */
 
 
+/**
+ *  Project are each of the case studies. Each points to a root folder were the processed data can be found.
+ * 
+ */
 class dsProject{
-    constructor()
+
+    // only required to fill the ID
+    constructor(theid)
     {
-        this.id;
+        this.id = theid;
         this.rootDirectory;
         this.projectName;
         this.dataTreeType;
@@ -92,6 +117,57 @@ class dsProject{
         this.dataTreeType = file.dataTreeType;
     }
 
+    fillProjectData(projectName, rootDirectory, dataTreeType)
+    {
+        this.projectName = projectName;
+        this.rootDirectory = rootDirectory;
+        this.dataTreeType = dataTreeType;
+
+    }
+
+    async createProjectTreeFolders(rootDirectory, treeType)
+    {
+        
+        // createRootDirectory
+        //var globaldir = ds_files.convertToGlobalPath(rootDirectory);
+        var check;
+        var globaldir = rootDirectory;
+        // convert to global path
+
+        fs.exists(globaldir, (exists) => {
+            if (exists)
+            {
+                fs.mkdir(globaldir);
+                return ds_msg.DS_RETURN_OK;
+            }
+            else
+            {
+                console.log(globaldir+ " already exists.");
+                ds_msg.DS_RETURN_FILE_EXIST_ALREADY;
+            }
+          });
+
+        // if (!fs.existsSync(globaldir))
+        // {
+
+        //     try
+        //     {
+                
+        //     }
+        //     catch(err)
+        //     {
+        //         console.error(err);
+        //     }
+
+        //     return ds_msg.DS_RETURN_OK;
+
+        // }
+
+        // abort if such folder exist already
+        // else
+        //     return ds_msg.DS_RETURN_FILE_EXIST_ALREADY;
+        
+    }
 
 }
 
@@ -111,6 +187,7 @@ class dsConfig
             this.version;
             this.projects = [];
             this.lastOpenedID;
+            this.checkSum;
 
     }
 
@@ -123,7 +200,7 @@ class dsConfig
         else
         {
             console.warn("No \"dsConfig.json\" was found. Using default settings.")
-            var config = ds_init.CreateDefaultConfig();
+            var config = CreateDefault();
         }
     
     }
@@ -157,6 +234,13 @@ class dsConfig
             else
             {
                 console.warn("\"lastOpenedID\" attr not found in JSON.");
+            }
+
+            if(jsonFile.checkSum != undefined)
+                this.checkSum = jsonFile.checkSum;
+            else
+            {
+                console.warn("\"checkSum\" attr not found in JSON.");
             }
 
             if(jsonFile.projects != undefined)
@@ -225,11 +309,52 @@ class dsConfig
      * Verify that the structure does not contain inconsitencies:
      * ex) 2 projects with the same id, "nof_projects" not matching the actual number, ...
      */
-    verifyIntegrity()
+    verifyProjectIntegrity()
     {
 
-    }
 
+        // 1_ Seach for duplicate ids
+        for (let j = 0; j < this.projects.length; j++)
+        {
+            for(let i = 0; i < this.projects.length; i++)
+            {
+                if(j!=i)
+                {
+                    if(this.projects[i].id ==  this.projects[j].id)
+                        return ProjectStatus.STATUS_NON_UNIQUE_ID;
+                }
+            }
+        }
+
+        for (let p in this.projects)
+        {
+            if (p instanceof dsProject)
+            {
+                //  2_1 check name
+                if(p.projectName ==undefined)
+                {
+                    console.log("Project with ID = "+ p.id+ ", Does not have a valid name.");
+                    return ProjectStatus.STATUS_BAD_PROJECT_NAME;
+                    
+                }
+
+                // 2.2 check directory (exists -> too slow?)
+                if(p.rootDirectory ==undefined)
+                {
+                    console.log("Project with ID = "+ p.id+ ", Does not have a valid rootDirectory.");
+                    return ProjectStatus.STATUS_BAD_PROJECT_NAME;
+                }
+                
+                // each tree type might have a special check to validate the data inside
+                // checkValidTree(p.dataTreeType)
+                    
+            }
+            else
+            {
+                console.log("these are not dsProjects...");
+            }
+        }
+    }
 
     /** 
      * 
@@ -244,12 +369,72 @@ class dsConfig
         ds_files.writeJSONFile("./dsconfig.json",this);
     }
 
+    isEmpty()
+    {
+        if(this.projects.length == 0)
+        {
+            if(this.nof_projects == 0)
+                return true;
 
+            else
+                return ds_msg.DS_RETURN_UNKNONW_ERROR;
+        }
+        else
+            return false;
+    }
+
+
+    /**
+     * 
+     * @param {*} projectName 
+     * @param {*} rootFolder 
+     * @param {*} dataTreeType Can be undefined or null and it will be parsed as a DEFAULT tree directory
+     */
+    CreateProject(projectName, rootFolder, dataTreeType)
+    {
+        var project = new dsProject(this.checkSum);
+
+        // verify non-empry/valid inpus
+        if(projectName == undefined || projectName == null || rootFolder == null || rootFolder == undefined)
+        {
+            console.log("Project with ID = "+ this.id+ ", Does not have a valid name.");
+            return ds_msg.DS_RETURN_INVALID_PARAMETER;
+        }
+        
+
+        if(dataTreeType == undefined || dataTreeType == null)
+        {
+            console.log("Tree Type not specified, assuming default tree configuration.");
+            dataTreeType = TreeTypes.Default;
+        }
+
+
+        
+        project.fillProjectData(projectName, rootFolder, dataTreeType);
+        let check = project.createProjectTreeFolders(rootFolder,dataTreeType);
+
+
+        if (check != ds_msg.DS_RETURN_OK)
+        {
+            console.error("Error creating "+ rootFolder +" a folder with that name already exists.")
+            return check;
+        }
+
+        // increment checksum for the next project
+        checkSum++;
+        return ds_msg.DS_RETURN_OK;
+    }
+
+
+/**
+ * Create an emptu
+ */
     CreateDefault()
     {
             this.version = DS_VERSION;
             // dataTreeLocation
-
+            this.checkSum = 0;
+            this.nof_projects= 0;
             // 
             this.projects = [];
 
@@ -277,15 +462,21 @@ async function ReadConfigFromJSON(path)
         {
             configFile.ReadFromJSON(file);
         }
+        // case we could not find the config file -> so we create a default one
         else
-            return ds_msg.DS_RETURN_UNKNONW_ERROR;
+        {
+            // do always for now
+            if(1)
+            {
+                console.log("Loading config not found, creating a new default file...");
+                configFile.CreateDefault();
+            }
+            else
+                return ds_msg.DS_RETURN_UNKNONW_ERROR;
+
+        }
+            
     }  
-    // // case we could not find the config file -> so we create a default one
-    else
-    {
-        console.log("Loading config not found, creating a new default file...");
-        configFile.CreateDefault();        
-    }
 
     // success scenario
     return configFile;
@@ -311,116 +502,6 @@ function callback_test1(input)
     return ;
 }
 
-/********************* */
-
-// function Popup_YESorNO(string_info, callback)
-// {
-//     var input;
-//     popupS.confirm({
-//         content:     '<b>'+string_info+'</b>',
-//         labelOk:     'Yes',
-//         labelCancel: 'No',
-//         onSubmit: function() {
-//             //accepted
-//             callback(1);
-
-//             //console.log(':)');
-//         },
-//         onClose: function() {
-//             callback(0);
-//            // console.log(':(');
-//         }
-//     });
-// }
-
- 
-
-
-
-// async function CloneParserRepo()
-// {
-//     await simpleGit.clone(source_tree.hostparser_git_repo_https,"./hots-parser/",[], async function(err)
-//         {
-//             if (err) throw err;
-//             else
-//             {
-//                 console.log("\tCreated HotsParser git repository at the root." +" \n" );
-//                 return 1;
-//             }
-
-//             return 0;
-//         });
-// }
-
-// function GitSucces()
-// {
-//     console.log("\tSuccess Cloning HotsParser git repo".green +" \n" );
-// }
-
-// /*  CheckRequiredFiles is an initialization function that will  */
-// async function CheckRequiredFiles()
-// {
-//     var all_good = 0;
-//     console.log("Checking for required libraries. \n" );
-    
-//     /* Load all check functions in an array so they can be checked at different pace */
-//     var methods_sample = [CheckHostReplayParser, CheckGitUpdaterScript]; 
-
-//     methods_sample.forEach(function (element) {
-//         var check = element(); // run function 
-//         // if check fails the function should have already displayed the error message
-//         if (!check)
-//             return false;
-
-//     });
-
-//     // out of the check loop...
-//     console.log("\tSuccess".green +" checking for required libraries. \n" );
-//     return true;
-// }
-
-
-
-
-// function CheckGitUpdaterScript () 
-// {
-//     var found = 0;
-//     if (fs.existsSync(source_tree.git_updater_script_file)) 
-//     {     
-//         console.log("\tDetected \"" +source_tree.git_updater_script_file.green +"\" file ... ");
-//         found = 1;
-//     }
-//     else
-//     {       
-//         let pathname =  path.join(__dirname, source_tree.git_updater_script_file);
-//         console.log("\t\"".red+pathname.red+" could not be found. Deepstorm will try to gather the files..." );
-//     }
-//     return found;
-// }
-
-
-
-// function CheckHostReplayParser () 
-// {
-//     var found = 0;
-//     if (fs.existsSync(source_tree.hostparser_folder)) 
-//     {     
-//         console.log("\tDetected \""+ source_tree.hostparser_folder.green + "\" folder ... "  );
-//         found = 1;
-//     }
-//     else
-//     {       
-//         let pathname =  path.join(__dirname, "./../../",source_tree.hostparser_folder);
-//         console.log("\tFolder \""+pathname.red+"\" could not be found.");
-//         console.log("\tAttemting to clone repository ..." +" \n" );
-       
-//         var ready = CloneParserRepo();
-//     }
-//     return found;
-// }
-
-
-
 
 
 /** EXPORTS */
@@ -436,4 +517,5 @@ exports.DisplayBuildVersion = DisplayBuildVersion;
 exports.dsConfig = dsConfig;
 exports.dsProject = dsProject;
 exports.ReadConfigFromJSON = ReadConfigFromJSON;
+exports.TreeTypes = TreeTypes;
 //exports.CheckHostReplayParser = CheckHostReplayParser;

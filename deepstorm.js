@@ -22,7 +22,7 @@
 /*
 {
 "version":"0.0.1",
-"nof_projects":30,
+"nof_projects":2,
 "last_opened":0,
 "projects":[ 
     {
@@ -164,9 +164,7 @@ async function main()
 /* Start here    */
 init.DisplayBuildVersion();
 
-
-/*  S */
-
+var modified_config = 0;
 
 
 
@@ -187,11 +185,6 @@ if (replay_path)
    // const ans = await ds_dataTree.askQuestion("Are you sure you want to deploy to PRODUCTION? ");
 
 
-    //console.log("WE FOUND IT");
-    // else
-    // console.log("WE DID NOT FIND IT");
-
-
 
     //let jsonwrite = ds_files.writeJSONFile(path, student);
     //console.log(jsonwrite);
@@ -199,16 +192,19 @@ if (replay_path)
     var global_congig_path = ds_files.convertToGlobalPath(CONFIG_FILE_DEFAULT_PATH);
 
     // Try read from json file in the root file, if not found create a default config
-    var dsconfig = await ds_init.ReadConfigFromJSON(global_congig_path);
-    if (dsconfig == ds_msg.DS_RETURN_UNKNONW_ERROR) 
+    var dsconfigfile = await ds_init.ReadConfigFromJSON(global_congig_path);
+
+    if (dsconfigfile == ds_msg.DS_RETURN_UNKNONW_ERROR )
     {
         console.error("Exception found, exiting")
         return;
     }
 
     // check to verify that settings were properly logged.
-    console.log(dsconfig);
+    console.log(dsconfigfile);
 
+
+    dsconfigfile.CreateProject("Test", "./projectTrees/test",ds_init.TreeTypes.Default );
 
     //var dsconfig = ds_init.dsConfig();
     //dsconfig.ReadConfigFromJSON();
@@ -244,7 +240,7 @@ if (replay_path)
 
     // var a =  await ds_Parser.GetAllPlayersData(replayInfo);
 
-   
+   dsconfig.saveConfigFileAsJson();
 
 }
    

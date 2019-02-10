@@ -29,7 +29,7 @@ function tryReadJSON(file)
         return (obj)
     })
     .catch(error => {
-        console.error(error);
+        console.warn(error);
         return ds_msg.DS_RETURN_NOT_FOUND;
     });
 
@@ -44,7 +44,8 @@ async function fileExist(filepath)
             console.log('File exists');
         } else if(err.code === 'ENOENT') {
             // file does not exist
-            fs.writeFile('log.txt', 'Some log\n');
+            console.warn("Configuration file \"dsConfig.json\" not found");
+            //fs.writeFile('log.txt', 'Some log\n');
         } else {
             console.log('Some other error: ', err.code);
         }
