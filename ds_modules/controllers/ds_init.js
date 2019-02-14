@@ -125,48 +125,53 @@ class dsProject{
 
     }
 
+
+
+
     async createProjectTreeFolders(rootDirectory, treeType)
     {
-        
-        // createRootDirectory
-        //var globaldir = ds_files.convertToGlobalPath(rootDirectory);
-        var check;
-        var globaldir = rootDirectory;
-        // convert to global path
-
-        fs.exists(globaldir, (exists) => {
-            if (exists)
-            {
-                fs.mkdir(globaldir);
-                return ds_msg.DS_RETURN_OK;
+        function statPath(path) {
+            try {
+              return fs.statSync(path);
+            } catch (ex) {}
+            return false;
+          };
+          
+        async function CheckAndMake(dir)
+        {   
+            var exist = statPath(dir);
+            var msg;
+            // check if such a folder exists
+            if(exist && exist.isDirectory()) {
+                
+                console.log(dir+ " already exists.");
+                msg = ds_msg.DS_RETURN_FILE_EXIST_ALREADY;
             }
             else
             {
-                console.log(globaldir+ " already exists.");
-                ds_msg.DS_RETURN_FILE_EXIST_ALREADY;
-            }
-          });
-
-        // if (!fs.existsSync(globaldir))
-        // {
-
-        //     try
-        //     {
+                try {
+                    let a = await fs.mkdirSync(dir)
+                    msg =  ds_msg.DS_RETURN_OK;
+                    //
+                    } catch (err) {
+                    console.error(err)
+                    }
                 
-        //     }
-        //     catch(err)
-        //     {
-        //         console.error(err);
-        //     }
+            }
+            return msg;
 
-        //     return ds_msg.DS_RETURN_OK;
+        }  
 
-        // }
 
-        // abort if such folder exist already
-        // else
-        //     return ds_msg.DS_RETURN_FILE_EXIST_ALREADY;
-        
+        // createRootDirectory
+        var globaldir = ds_files.convertToGlobalPath(rootDirectory);
+        //var globaldir = rootDirectory;
+
+        let msg = await CheckAndMake(globaldir);
+
+ 
+
+        return msg;
     }
 
 }
@@ -195,6 +200,7 @@ class dsConfig
     {
         if (ds_files.fileExist("./dsconfig.json"))
         {
+            console.log('Detected dsConfiguration file, loading presets...');
             var config = require ("./dsconfig.json");
         }  
         else
@@ -390,7 +396,7 @@ class dsConfig
      * @param {*} rootFolder 
      * @param {*} dataTreeType Can be undefined or null and it will be parsed as a DEFAULT tree directory
      */
-    CreateProject(projectName, rootFolder, dataTreeType)
+    async CreateProject(projectName, rootFolder, dataTreeType)
     {
         var project = new dsProject(this.checkSum);
 
@@ -411,7 +417,7 @@ class dsConfig
 
         
         project.fillProjectData(projectName, rootFolder, dataTreeType);
-        let check = project.createProjectTreeFolders(rootFolder,dataTreeType);
+        let check = await project.createProjectTreeFolders(rootFolder,dataTreeType);
 
 
         if (check != ds_msg.DS_RETURN_OK)
@@ -421,7 +427,7 @@ class dsConfig
         }
 
         // increment checksum for the next project
-        checkSum++;
+        this.checkSum++;
         return ds_msg.DS_RETURN_OK;
     }
 
@@ -438,8 +444,8 @@ class dsConfig
             // 
             this.projects = [];
 
-            // 
-            this.lastOpenedID;
+            // -1 is the index by default
+            this.lastOpenedID = -1;
         
     }
 }
@@ -468,7 +474,7 @@ async function ReadConfigFromJSON(path)
             // do always for now
             if(1)
             {
-                console.log("Loading config not found, creating a new default file...");
+                console.log("dsConfiguration file not found, creating a new from default...");
                 configFile.CreateDefault();
             }
             else

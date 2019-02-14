@@ -240,7 +240,7 @@ if (replay_path)
 
     // var a =  await ds_Parser.GetAllPlayersData(replayInfo);
 
-   dsconfig.saveConfigFileAsJson();
+    dsconfigfile.saveConfigFileAsJson();
 
 }
    

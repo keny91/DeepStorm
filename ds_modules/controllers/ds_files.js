@@ -36,20 +36,27 @@ function tryReadJSON(file)
 } 
 
 
+/** Unsure if this function is worked as intended
+ * 
+ * @param {} filepath 
+ */
 async function fileExist(filepath)
 {
-
-    fs.stat(filepath, function(err, stat) {
+    var out = 0;
+    var out = await fs.stat(filepath, function(err, stat) {
         if(err == null) {
-            console.log('File exists');
+            out = 1;
+            return out;
+
         } else if(err.code === 'ENOENT') {
             // file does not exist
-            console.warn("Configuration file \"dsConfig.json\" not found");
-            //fs.writeFile('log.txt', 'Some log\n');
         } else {
             console.log('Some other error: ', err.code);
         }
     });
+
+    return out;
+
       
 }
 
