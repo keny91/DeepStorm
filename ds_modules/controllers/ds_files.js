@@ -81,18 +81,48 @@ function tryWriteJSON(file, object)
 
 
 //function will check if a directory exists, and create it if it doesn't
-function createDirectory(directory, callback) {  
-    fs.stat(directory, function(err, stats) {
-      //Check if error defined and the error code is "not exists"
-      if (err && err.errno === 34) {
-        //Create the directory, call the callback.
-        fs.mkdir(directory, callback);
-      } else {
-        //just in case there was a different error:
-        callback(err)
-      }
-    });
-  }
+async function createDirectory(rootDirectory) {  
+
+    function statPath(path) {
+        try {
+          return fs.statSync(path);
+        } catch (ex) {}
+        return false;
+      };
+      
+    async function CheckAndMake(dir)
+    {   
+        var exist = statPath(dir);
+        var msg;
+        // check if such a folder exists
+        if(exist && exist.isDirectory()) {
+            
+            console.log(dir+ " already exists.");
+            msg = ds_msg.DS_RETURN_FILE_EXIST_ALREADY;
+        }
+        else
+        {
+            try {
+                let a = await fs.mkdirSync(dir)
+                msg =  ds_msg.DS_RETURN_OK;
+                //
+                } catch (err) {
+                console.error(err)
+                }
+            
+        }
+        return msg;
+
+    }  
+
+    // convert to global path
+    var globaldir = convertToGlobalPath(rootDirectory);
+
+    // Wait for folder to be created
+    let msg = await CheckAndMake(globaldir);
+
+    return msg;
+}
 
 // function writeJSONFile(path, object) 
 // {

@@ -148,6 +148,11 @@ async function main()
  *           1-2 (NOT_FOUND) ASK to create tree at DEFAULT location or a path -> create at path
  *              ->save config as json. 
  * 
+ *      2) CREATE A NEW TREE PROJECT
+ *           2-1 (NAME & ROOT & TREETYPE) -> Create the folders and files at the specified root, FOLDER vary depending on TREETYPE
+ *           2-2 (SUCCESS) Update dsconfig.json
+ *           2-3 
+ * 
  *      FILTERING REPLAYS
  * 
  *      1) Create Filter
@@ -204,17 +209,18 @@ if (replay_path)
     console.log(dsconfigfile);
 
 
-    dsconfigfile.CreateProject("Test", "./projectTrees/test",ds_init.TreeTypes.Default );
+    // Test project creation
+    // await dsconfigfile.CreateProject("Test", "./projectTrees/test",ds_init.TreeTypes.Default );
+    // await dsconfigfile.CreateProject("Test2", "./projectTrees/test2",ds_init.TreeTypes.Default );
 
-    //var dsconfig = ds_init.dsConfig();
-    //dsconfig.ReadConfigFromJSON();
+
 
     console.log(replayInfo.gameData.matchLenghtLoops);
     console.log(ds_Parser.LoopsToSeconds(replayInfo.gameData.matchLenghtLoops));
     console.log(ds_Parser.LoopsToMinutes(replayInfo.gameData.matchLenghtLoops));
 
     var filter = new ds_matchFilter.MatchFilter();
-    //var filter_e = new filter();
+
     filter.map = vars.Standard_Map_List.CursedHollow;
     filter.addHero( vars.Hero_List.Butc, vars.DS_LOSS,);
     //filter.setMatchDurationRange_loops(300,30000);

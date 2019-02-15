@@ -130,46 +130,11 @@ class dsProject{
 
     async createProjectTreeFolders(rootDirectory, treeType)
     {
-        function statPath(path) {
-            try {
-              return fs.statSync(path);
-            } catch (ex) {}
-            return false;
-          };
-          
-        async function CheckAndMake(dir)
-        {   
-            var exist = statPath(dir);
-            var msg;
-            // check if such a folder exists
-            if(exist && exist.isDirectory()) {
-                
-                console.log(dir+ " already exists.");
-                msg = ds_msg.DS_RETURN_FILE_EXIST_ALREADY;
-            }
-            else
-            {
-                try {
-                    let a = await fs.mkdirSync(dir)
-                    msg =  ds_msg.DS_RETURN_OK;
-                    //
-                    } catch (err) {
-                    console.error(err)
-                    }
-                
-            }
-            return msg;
 
-        }  
-
-
-        // createRootDirectory
-        var globaldir = ds_files.convertToGlobalPath(rootDirectory);
-        //var globaldir = rootDirectory;
-
-        let msg = await CheckAndMake(globaldir);
-
+        let msg = await ds_files.createDirectory(rootDirectory);
  
+        // create tree structure based on treeType
+        // <--- here
 
         return msg;
     }
@@ -425,6 +390,10 @@ class dsConfig
             console.error("Error creating "+ rootFolder +" a folder with that name already exists.")
             return check;
         }
+
+        this.projects.push(project);
+        this.nof_projects++;
+        this.lastOpenedID = project.id;
 
         // increment checksum for the next project
         this.checkSum++;
