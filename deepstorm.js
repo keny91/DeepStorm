@@ -214,6 +214,8 @@ if (replay_path)
     // await dsconfigfile.CreateProject("Test2", "./projectTrees/test2",ds_init.TreeTypes.Default );
 
 
+    // 
+    var filesInReplayFolder = await ds_files.findAllFilesInFolder("C:\\Users\\luish\\Documents\\Heroes of the Storm\\Accounts\\1527720\\2-Hero-1-315647\\Replays\\Multiplayer");
 
     console.log(replayInfo.gameData.matchLenghtLoops);
     console.log(ds_Parser.LoopsToSeconds(replayInfo.gameData.matchLenghtLoops));

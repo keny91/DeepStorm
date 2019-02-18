@@ -124,28 +124,27 @@ async function createDirectory(rootDirectory) {
     return msg;
 }
 
-// function writeJSONFile(path, object) 
-// {
-//     return new Promise((resolve, reject) => {
-//         let data =  JSON.stringify(object, null, 2);
-//             fs.writeFile(path, data, (err) => {  
-//                 if (err) reject(err);
-//                 resolve(ds_msg.DS_RETURN_OK);
-//                 // console.log('Data written to file');
-//         });
-//     });
-// }
+async function findAllFilesInFolder (folder)
+{
+    function Read(folder)
+    {
+        var arr = [];
+        fs.readdirSync(folder).forEach(file => {
+            //console.log(file);
+            let filename = file;
+            arr.push(filename);
+          });
 
+        return arr;
+    }
 
-// function readJSONFile(file) 
-// {
-//     return new Promise((resolve, reject) => {
-//         fs.readFile(file, 'utf-8', (err, data) => { 
-//             if (err) resolve(0);
-//             resolve(JSON.parse(data));
-//         });
-//     });
-// }
+    const testFolder = folder;
+
+    // wait before proceeding
+    let ret = await Read(folder);
+
+    return ret;
+}
 
 
 exports.readJSONFile = tryReadJSON ;
@@ -153,5 +152,6 @@ exports.writeJSONFile = tryWriteJSON;
 exports.createDirectory = createDirectory;
 exports.convertToGlobalPath = convertToGlobalPath;
 exports.fileExist = fileExist;
+exports.findAllFilesInFolder = findAllFilesInFolder;
 
 
