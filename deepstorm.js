@@ -151,16 +151,35 @@ async function main()
  *      2) CREATE A NEW TREE PROJECT
  *           2-1 (NAME & ROOT & TREETYPE) -> Create the folders and files at the specified root, FOLDER vary depending on TREETYPE
  *           2-2 (SUCCESS) Update dsconfig.json
- *           2-3 
+ *               (FAIL)  ERROR CODE
+ *           2-3 ()
+ * 
+ * 
+ * 
  * 
  *      FILTERING REPLAYS
  * 
+ *          (DECIDE IF LOCAL OR )
  *      1) Create Filter
  *      2) Get Replay queries to HOTSAPI -> maybe we can get complex params like certain characters or builds
  *      3) Verify that replay contains filter´s rules -> APPROVE OR REJECT
  *      4) APPROVED replays will be re-parsed and the data will be locally stored for our analyzing purpuses
  *          ===> BUILD A DATA TREE FILE SYSTEM
  *          ===> Save
+ * 
+ * 
+ * 
+ *      BUILD DATA:
+ * 
+ *      A) RAW DATA TREE:  this tree references a local or web folder or web Location with replays.
+ *          - Either be huge and contain all possible 'SIMPLE' analysis.
+ *          ('COMPLEX' analysis should be more easily interpolated from existing SIMPLE data) 
+ *          
+ * 
+ *      B) REFINED_DATA_TREE: 
+ *          - A file at the root of the file will provide the constrains and the purpose of this tree
+ * 
+ *      C) ...
  * 
  */
 
@@ -214,8 +233,6 @@ if (replay_path)
     // await dsconfigfile.CreateProject("Test2", "./projectTrees/test2",ds_init.TreeTypes.Default );
 
 
-    // 
-    var filesInReplayFolder = await ds_files.findAllFilesInFolder("C:\\Users\\luish\\Documents\\Heroes of the Storm\\Accounts\\1527720\\2-Hero-1-315647\\Replays\\Multiplayer");
 
     console.log(replayInfo.gameData.matchLenghtLoops);
     console.log(ds_Parser.LoopsToSeconds(replayInfo.gameData.matchLenghtLoops));
