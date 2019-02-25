@@ -3,6 +3,16 @@
  * interprete winrates.
  */
 
+
+
+/** Things to add to matchFilter
+ * 
+ *      -    Filter out replays when certain heroes have a min/max X value. (DMG, HEAL, SOAK, DEATHS,TKDOWNS)
+ * 
+ * 
+ */
+
+
 const vars = require("../../environment/ds_vars.js");
 const ds_Parser = require("./ds_parser");
 const ds_msg = require("./../../environment/ds_messages");

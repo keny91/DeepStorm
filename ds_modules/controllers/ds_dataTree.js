@@ -1,13 +1,17 @@
 
 
 
-const root_File_name = "ds_study_list.json"; // json?
 const readline = require("readline");
 const ds_msg = require("./../../environment/ds_messages");
+const ds_matchFilter = require("./ds_matchFilter");
+const ds_vars = require("./../../environment/ds_vars");
+
+
+
 
 
 /** 
- * 
+ *  Deprecated??
  * 
  */
 function askTreeDirectory() {
@@ -22,20 +26,43 @@ function askTreeDirectory() {
     }))
 }
 
-function CreateTreeAtDirectory(dir)
-{
 
+
+/**
+ * These are data structures in which we specify the data we will be collecting from each replay.
+ */
+class DataCollection
+{
+    constructor()
+    {
+        // Data stored that belong to each team
+        this.TeamWinData; // ds_vars.team;
+        this.TeamLoseData;
+    }
 }
+
+
+
+
+
+
+
 
 class DataTree
 {
     constructor(dir)
     {
-        /*  if directory exists */
-        //loadDataTree(dir);
+        // Criteria that will filter out data
+        //this.replayFilter = new ds_matchFilter.MatchFilter();
+        this.replayFilter;
+        //this.dataCollection = new 
+        this.dataCollection;
 
-        //var aaa  = askTreeDirectory("Will this be the dir? ");
-        /* else create tree at location */
+
+    }
+
+    setReplayValues()
+    {
 
     }
 

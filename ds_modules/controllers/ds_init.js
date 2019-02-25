@@ -38,7 +38,8 @@ const TreeTypes = {
     RawHeroDataOnly : 101,
     TeamModel : 102,
     SingleMap : 103,
-    SingleLeague : 104
+    SingleLeague : 104,
+    DeepHeroAnalysisOnMap : 105
     // ... more added if needed
   }
 
