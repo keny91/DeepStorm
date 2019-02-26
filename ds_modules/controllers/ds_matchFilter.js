@@ -323,6 +323,7 @@ function StormDataFulfillsFilter(stormdata, filter)
 
 
     console.log("Replay fulfills criteria");
+    return true;
 
 }
 
