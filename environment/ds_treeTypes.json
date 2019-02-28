@@ -1,0 +1,9 @@
+{
+    "Default" : 100,
+    "RawHeroDataOnly" : 101,
+    "TeamModel" : 102,
+    "SingleMap_SingleHero_WinOnly" : 103,
+    "SingleLeague" : 104,
+    "DeepHeroAnalysisOnMap" : 105
+    
+}

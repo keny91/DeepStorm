@@ -12,8 +12,10 @@ const ds_files = require("./ds_files");
 const fs  = require("fs");
 // const colors = require('colors');
 const source_tree = require("./../../environment/ds_sourceTree_constants.js");
+const ds_tree = require("./ds_dataTree");
 const pjson = require("./../../package.json");
 const ds_msg = require("./../../environment/ds_messages");
+const TreeTypes = require("./../../environment/ds_treeTypes.json");
 // const simpleGit = require('simple-git')();
 // const async = require("async");
 
@@ -33,15 +35,15 @@ const ProjectStatus=
 /* MMR  - currently Hotslogs based
 Need to define types with some wording.
 */
-const TreeTypes = {
-    Default : 100,
-    RawHeroDataOnly : 101,
-    TeamModel : 102,
-    SingleMap : 103,
-    SingleLeague : 104,
-    DeepHeroAnalysisOnMap : 105
-    // ... more added if needed
-  }
+// const TreeTypes = {
+//     Default : 100,
+//     RawHeroDataOnly : 101,
+//     TeamModel : 102,
+//     SingleMap : 103,
+//     SingleLeague : 104,
+//     DeepHeroAnalysisOnMap : 105
+//     // ... more added if needed
+// }
 
 const DS_VERSION = pjson.version;
 
@@ -73,27 +75,6 @@ function DisplayBuildVersion()
 }
 
 
-/*
-{
-"version":"0.0.1",
-"nof_projects":30,
-"last_opened":0,
-"projects":[ 
-    {
-        "id":0,
-        "rootDirectory": "absolute_local_path",
-        "projectName":"test1",
-        "dataTreeType": 100,
-    },
-    {
-        "id":1,
-        "rootDirectory": "absolute_local_path2",
-        "projectName":"test2",
-        "dataTreeType": 101,
-    } ]
-}
-*/
-
 
 /**
  *  Project are each of the case studies. Each points to a root folder were the processed data can be found.
@@ -123,7 +104,6 @@ class dsProject{
         this.projectName = projectName;
         this.rootDirectory = rootDirectory;
         this.dataTreeType = dataTreeType;
-
     }
 
 
@@ -138,6 +118,19 @@ class dsProject{
         // <--- here
 
         return msg;
+    }
+
+    /** 
+     *  Once we have the project we can create the tree structure
+     */
+    async initializeTree()
+    {
+        //  1_ create the tree struct
+        var tree = await ds_tree.DataTree(this.projectName, this.rootDirectory , this.dataTreeType);
+        //  2_ read the tree_data file
+        // FILLL
+
+        return tree;
     }
 
 }
@@ -437,6 +430,8 @@ async function ReadConfigFromJSON(path)
         if(file != ds_msg.DS_RETURN_NOT_FOUND)
         {
             configFile.ReadFromJSON(file);
+
+            
         }
         // case we could not find the config file -> so we create a default one
         else
@@ -493,5 +488,5 @@ exports.DisplayBuildVersion = DisplayBuildVersion;
 exports.dsConfig = dsConfig;
 exports.dsProject = dsProject;
 exports.ReadConfigFromJSON = ReadConfigFromJSON;
-exports.TreeTypes = TreeTypes;
+// exports.TreeTypes = TreeTypes;
 //exports.CheckHostReplayParser = CheckHostReplayParser;

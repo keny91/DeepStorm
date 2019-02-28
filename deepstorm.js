@@ -43,13 +43,13 @@
 
 
 //const ls = require('os');
-const init = require("./ds_modules/controllers/ds_init");
 const ds_Parser = require("./ds_modules/controllers/ds_parser");  // can take out of here
 const ds_matchFilter = require("./ds_modules/controllers/ds_matchFilter");   
 const vars = require("./environment/ds_vars.js");
-const ds_dataTree = require("./ds_modules/controllers/ds_dataTree");
 const ds_files = require("./ds_modules/controllers/ds_files");
 const ds_init = require("./ds_modules/controllers/ds_init");
+const ds_dataTree = require("./ds_modules/controllers/ds_dataTree");
+const TreeTypes = require("./environment/ds_treeTypes.json");
 const ds_msg = require("./environment/ds_messages");
 var csv = require("fast-csv");
 const fetch = require('node-fetch');
@@ -186,7 +186,7 @@ async function main()
 /*  Execute in order */
 
 /* Start here    */
-init.DisplayBuildVersion();
+ds_init.DisplayBuildVersion();
 
 var modified_config = 0;
 
@@ -196,6 +196,7 @@ var a = await MakeHotsapiRequest();
 console.log(a);
 // linear -> wait till done
 
+//var newTree = ds_dataTree.DataTree("newTree", "C:\\Users\\luishm\\Documents\\aaa\\DeepStorm\\projectTrees", treeType);
 
 
 
@@ -264,7 +265,9 @@ if (replay_path)
 
 
     // var a =  await ds_Parser.GetAllPlayersData(replayInfo);
+    
 
+    console.log("Saving dsConfig file...");
     dsconfigfile.saveConfigFileAsJson();
 
 }

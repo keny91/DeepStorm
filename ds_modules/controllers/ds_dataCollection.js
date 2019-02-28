@@ -17,6 +17,14 @@ class DataCollection
         this.MatchData;
     }
 
+    /** Maybe is unnecessary
+     */
+    initFromJson(jsonFile)
+    {
+        // all the this
+    }
+
+
     /**
      * 
      * @param {*} param 
