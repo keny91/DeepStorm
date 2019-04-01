@@ -456,25 +456,6 @@ async function ReadConfigFromJSON(path)
 
 
 
-function callback_test1(input)
-{
-    if(input)
-    {
-        console.log(":D");
-    }
-
-    else
-    {
-        console.log("D:");
-    }
-
-    // do x
-
-    return ;
-}
-
-
-
 /** EXPORTS */
 
 // dsLogs.dsLog = dsLog;

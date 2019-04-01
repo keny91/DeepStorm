@@ -44,7 +44,13 @@ class MatchFilter
         this._maxMatchDuration_loops = vars.DS_BUILD_ANY;
         this._minMatchDuration_loops = vars.DS_BUILD_ANY;
 
+        // hero damage 5-array
 
+        // siege damage
+
+        // camps captured; team or per hero/
+        
+        
 
         
         this._winHeroesTeamModel = vars.DS_BUILD_ANY;
@@ -52,6 +58,7 @@ class MatchFilter
 
         this._maxPlayerMMR =  vars.DS_ANY;
         this._minPlayerMMR =  vars.DS_ANY;
+
         this._maxAvrPlayerMMR =  vars.DS_ANY;
         this._minAvrPlayerMMR =  vars.DS_ANY;
 

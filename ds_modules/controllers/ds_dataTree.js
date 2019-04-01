@@ -194,11 +194,12 @@ class DataTree
 
         //  1-  check that StormData fulfills the filter
         
+        
         //  2-  (if success) get use StormData to create a permanent data entry in the tree 
         //  (following the relevant info according to collection) 
 
 
-        //  
+        //  3- Do something with the data in the replay
 
 
     }
@@ -261,7 +262,7 @@ class DataTree
  * 
  */
 // CreateTree(treeType, heroes, maps, ...)
-CreateTree(treeType, heroes, maps, other)
+function CreateTree(treeType, heroes, maps, other)
 {
     switch (treeType)
     {
@@ -283,5 +284,5 @@ CreateTree(treeType, heroes, maps, other)
 
 
 exports.DataTree = DataTree;
-exports.askTreeDirectory = askTreeDirectory;
+
 

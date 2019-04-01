@@ -130,6 +130,34 @@ async function MakeHotsapiRequest()
 } 
 
 
+/* Request test */
+async function MakeHotsapiRequestReplays()
+{
+
+    const url = "https://hotsapi.net/api/v1/replays?min_id=1000000";
+    const getData = async url => {
+      try {
+        const response = await fetch(url);
+        const json = await response.json();
+        //console.log(json);
+        return json;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    j = await getData(url);
+    ////
+
+    var a = j;
+    // for (let replay in j)
+    // {
+    //     let replay_sample = j[replay];
+    //     console.log(replay_sample.id);
+    // }
+    let last_replay = j.length;
+
+    return j;
+} 
 
 
 async function main()
@@ -192,7 +220,8 @@ var modified_config = 0;
 
 
 
-var a = await MakeHotsapiRequest();
+//var a = await MakeHotsapiRequest();
+var a  = await MakeHotsapiRequestReplays();
 console.log(a);
 // linear -> wait till done
 
