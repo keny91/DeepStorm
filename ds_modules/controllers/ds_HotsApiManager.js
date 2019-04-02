@@ -35,6 +35,51 @@
 */
 
 
+// "players": [
+//     {
+//       "hero": "Valla",
+//       "hero_level": 9,
+//       "team": 1,
+//       "winner": false,
+//       "blizz_id": 118489,
+//       "party": 0,
+//       "silenced": false,
+//       "battletag": "fireseed#2609",
+//       "talents": {
+//         "1": "DemonHunterCombatStyleHotPursuit",
+//         "4": "DemonHunterCreedoftheHunter",
+//         "7": "DemonHunterDeathDealer",
+//         "10": "DemonHunterHeroicAbilityRainofVengeance",
+//         "13": "DemonHunterCombatStyleTemperedByDiscipline",
+//         "16": "DemonHunterManticore",
+//         "20": "DemonHunterFarflightQuiver"
+//       },
+//       "score": {
+//         "level": 20,
+//         "kills": 6,
+//         "assists": 3,
+//         "takedowns": 9,
+//         "deaths": 7,
+//         "highest_kill_streak": 6,
+//         "hero_damage": 34677,
+//         "siege_damage": 75598,
+//         "structure_damage": 24027,
+//         "minion_damage": 42132,
+//         "creep_damage": 8800,
+//         "summon_damage": 9439,
+//         "time_cc_enemy_heroes": 5,
+//         "healing": null,
+//         "self_healing": 0,
+//         "damage_taken": null,
+//         "experience_contribution": 9144,
+//         "town_kills": 0,
+//         "time_spent_dead": 308,
+//         "merc_camp_captures": 0,
+//         "watch_tower_captures": 0,
+//         "meta_experience": 75026
+//       }
+//     },
+
 
 const RequestTypes_HotsApi = {
     Talent : "https://hotsapi.net/api/v1/talents/",

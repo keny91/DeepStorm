@@ -13,9 +13,98 @@
  */
 
 
+
+
+ 
 const vars = require("../../environment/ds_vars.js");
 const ds_Parser = require("./ds_parser");
 const ds_msg = require("./../../environment/ds_messages");
+
+
+
+
+// "players": [
+//     {
+//       "hero": "Valla",
+//       "hero_level": 9,
+//       "team": 1,
+//       "winner": false,
+//       "blizz_id": 118489,
+//       "party": 0,
+//       "silenced": false,
+//       "battletag": "fireseed#2609",
+//       "talents": {
+//         "1": "DemonHunterCombatStyleHotPursuit",
+//         "4": "DemonHunterCreedoftheHunter",
+//         "7": "DemonHunterDeathDealer",
+//         "10": "DemonHunterHeroicAbilityRainofVengeance",
+//         "13": "DemonHunterCombatStyleTemperedByDiscipline",
+//         "16": "DemonHunterManticore",
+//         "20": "DemonHunterFarflightQuiver"
+//       },
+//       "score": {
+//         "level": 20,
+//         "kills": 6,
+//         "assists": 3,
+//         "takedowns": 9,
+//         "deaths": 7,
+//         "highest_kill_streak": 6,
+//         "hero_damage": 34677,
+//         "siege_damage": 75598,
+//         "structure_damage": 24027,
+//         "minion_damage": 42132,
+//         "creep_damage": 8800,
+//         "summon_damage": 9439,
+//         "time_cc_enemy_heroes": 5,
+//         "healing": null,
+//         "self_healing": 0,
+//         "damage_taken": null,
+//         "experience_contribution": 9144,
+//         "town_kills": 0,
+//         "time_spent_dead": 308,
+//         "merc_camp_captures": 0,
+//         "watch_tower_captures": 0,
+//         "meta_experience": 75026
+//       }
+//     },
+
+
+const CustomHeroFilterLabels = {
+    teamLevel: 5001,
+
+
+}
+
+
+const CustomHeroFilterLabels = {
+    HeroDmg: 401,
+    SiegeDmg: 4001,
+    StructureDmg : 40001,
+    DmgTaken: 4002,
+    DmgSoaked: 40002,
+    KDA: 4003,
+    SelfHealing: 4004,
+    Heal : 402,
+    Exp: 403,
+    MercsNOF : 404,
+    MercsDmg
+    Deaths : 405,
+    TimeDead : 40005,
+    TakeDonws : 406,
+    Kills : 407,
+    Assists : 408,
+    SoloKills : 409,
+    KillParticipation : 4009,
+    StunTime : 410,
+    CCdTimeEnemies : 411,
+    XMP : 412,
+    GlobesCollected : 413,
+
+
+
+
+    // ... more added if needed
+}
 
 
 /**
@@ -29,7 +118,7 @@ class MatchFilter
         this._map;
         this._Heroes = [];
 
-
+        // heroes array contains hero instance (relevant hero information) vars.playerData
         this._winHeroes = [];
         this._loseHeroes = [];
         // Saved when storing a win/lose hero
@@ -50,6 +139,9 @@ class MatchFilter
 
         // camps captured; team or per hero/
         
+
+        // custom hero filtering rules. Hero, damage,heal, deaths, camps, ... (label)
+        this.filteringRules= [];
         
 
         
@@ -145,11 +237,11 @@ class MatchFilter
     /** Add a hero to the filtering, the hero will have to appear on the match under the 
      * appropiate circunstances
      * 
-     * @param {*} heroNameId the Hero id to be inserted as a filter param
+     * @param {*} hero the heroData to be inserted as a filter param
      * @param {*} team Win/Lose/Any 
      * @param {*} build a certain build for the hero, if any
      */
-    addHero(heroNameId, team, build)
+    addHero(heroData, team, build)
     {
 
         switch(team)
@@ -161,7 +253,7 @@ class MatchFilter
                         this._winHeroesBuilds.push(vars.DS_BUILD_ANY);
                     else
                         this._winHeroesBuilds.push(build);
-                    this._winHeroes.push(heroNameId);
+                    this._winHeroes.push(heroData);
                 }     
                 else
                     console.warn("Heroes limit reached in team Win.");
@@ -173,7 +265,7 @@ class MatchFilter
                         this._loseHeroesBuilds.push(vars.DS_BUILD_ANY);
                     else
                         this._loseHeroesBuilds.push(build);
-                    this._loseHeroes.push(heroNameId);
+                    this._loseHeroes.push(heroData);
                 }
                 else
                     console.warn("Heroes limit reached in team Loss.");
@@ -181,7 +273,7 @@ class MatchFilter
 
             case null:
                 if(this._Heroes.length < 10)
-                    this._Heroes.push(heroNameId);
+                    this._Heroes.push(heroData);
                 else
                     console.warn("Heroes limit reached in match.");
             break;
